@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import SidebarManager from "./components/manager/SidebarManager";
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <div>Hello world!</div>,
+      path: "/manager",
+      element: <SidebarManager />,
     },
   ]);
   return <RouterProvider router={router} />;
