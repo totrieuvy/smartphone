@@ -1,65 +1,111 @@
 .SidebarManager {
   display: flex;
-  align-items: center;
-  padding: 0 16px;
-  position: relative;
+  width: 100%;
+  height: 100%;
 
-  &__logo {
+  &__menuButton {
+    display: none;
+    font-size: 24px;
+    color: #fff;
+    padding: 20px 2px;
+    background-color: #05386a;
+    cursor: pointer;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 100%;
-    display: flex;
-    align-items: center;
-
-    img {
-      height: 100%;
-      object-fit: contain;
-    }
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
   }
 
-  &__user {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    position: absolute;
-    right: 16px;
-    gap: 10px;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    img {
-      height: 40px;
-      margin-left: 10px;
-      object-fit: contain;
-    }
-  }
-}
-
-// Responsive Styles
-@media (max-width: 768px) {
-  .SidebarManager {
+  &__left {
+    width: 13%;
+    height: 100vh;
+    background-color: #05386a;
     display: flex;
     justify-content: center;
-    &__logo {
-      position: static;
-      transform: none;
-      margin-bottom: 10px;
+    padding-top: 20px;
+    transition: transform 0.3s ease;
+
+    &.open {
+      transform: translateX(0);
     }
 
-    &__user {
-      position: static;
-      margin-left: 0;
-      margin-bottom: 10px;
-      justify-content: center; // Center user menu on small screens
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+
+      li {
+        width: 100%;
+      }
+
+      .SidebarManager__menu__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        font-size: 20px;
+        text-decoration: none;
+        padding: 15px 20px;
+        width: 100%;
+
+        &:hover {
+          background-color: #388e3c;
+          cursor: pointer;
+        }
+      }
+
+      .dropdown-toggle {
+        cursor: pointer;
+      }
+
+      .active-item {
+        background-color: #4caf50;
+      }
+
+      .icon {
+        font-size: 25px;
+      }
+
+      .menu-text {
+        display: inline;
+      }
     }
   }
 
-  .SidebarManager__user {
-    img {
-      height: 30px; // Adjust user icon size on smaller screens
+  &__right {
+    flex-grow: 1;
+  }
+
+  @media (max-width: 768px) {
+    &__left {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 60%;
+      max-width: 250px;
+      height: 100%;
+      transform: translateX(-100%);
+      z-index: 1000;
+    }
+
+    &__menuButton {
+      display: block;
+    }
+
+    .menu-text {
+      display: none;
+    }
+
+    &__right {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__left {
+      width: 80%;
     }
   }
 }
