@@ -21,4 +21,4 @@ function CustomerApp() {
   );
 }
 
-export default CensorApp;
+export default CustomerApp;
