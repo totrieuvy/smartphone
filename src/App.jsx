@@ -12,6 +12,7 @@ import Staff from './pages/manager/account/staff/Staff'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import HeaderAndFooterTesting from './pages/Testing-Customer-Header-Footer/index';
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +54,11 @@ function App() {
     {
       path: "/admin",
       element: <AdminApp />,     
+      
+    },
+    {
+      path: "/test",
+      element: <HeaderAndFooterTesting />,     
       
     },
   ]);

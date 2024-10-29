@@ -1,22 +1,19 @@
 
 import { Outlet } from 'react-router-dom';
-// import Footer from '../../components/componentCensor/Footer/FooterCensor.jsx';
-// import Header from '../../components/componentCensor/Header/HeaderCensor.jsx';
 import React from 'react';
+import HeaderCustomer from './../../components/componentCustomer/Header/HeaderCustomer';
+import FooterCustomer from './../../components/componentCustomer/Footer/FooterCustomer';
+import './AutoAllign-Header-Footer.css';
 
 
 function CustomerApp() {
   return (
-    <div className="all">
-      <header className="header">
-        <Header />
-      </header>
-      <main className="main">
+    <div className="Header-Footer">
+      <HeaderCustomer />
+      <main className="autoAllign-Header-Footer">
         <Outlet />
       </main>
-      <footer className="footer">
-        <Footer />
-      </footer>
+      <FooterCustomer />
     </div>
   );
 }
