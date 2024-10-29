@@ -10,6 +10,7 @@ import ErrorPage from "./pages/error/ErrorPage";
 import Category from "./pages/manager/category/Category";
 import Product from "./pages/manager/product/Product";
 import AdminApp from './layout/AdminApp/AdminApp'
+import HeaderAndFooterTesting from './pages/Testing-Customer-Header-Footer/index';
 
 function App() {
   const router = createBrowserRouter([
@@ -39,6 +40,11 @@ function App() {
     {
       path: "/admin",
       element: <AdminApp />,     
+      
+    },
+    {
+      path: "/test",
+      element: <HeaderAndFooterTesting />,     
       
     },
   ]);
