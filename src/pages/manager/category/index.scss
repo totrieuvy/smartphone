@@ -1,0 +1,30 @@
+.Category {
+  h2 {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0px;
+    color: red;
+  }
+
+  .Category__table {
+    width: 80%;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+      width: 100%; 
+    }
+  }
+
+  &__button {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    margin-left: 130px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      margin-left: 0;
+    }
+  }
+}
