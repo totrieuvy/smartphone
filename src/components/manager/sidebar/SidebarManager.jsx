@@ -6,6 +6,7 @@ import {
   UserOutlined,
   DoubleRightOutlined,
   DoubleLeftOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import { Dropdown, Menu } from "antd";
 import "./SidebarManager.scss";
@@ -25,13 +26,13 @@ function SidebarManager() {
   const accountMenu = (
     <Menu>
       <Menu.Item key="total">
-        <NavLink to="total">Total</NavLink>
+        <NavLink to="total-account">Total</NavLink>
       </Menu.Item>
       <Menu.Item key="customer">
-        <NavLink to="customer">Customer</NavLink>
+        <NavLink to="list-customer">Customer</NavLink>
       </Menu.Item>
       <Menu.Item key="staff">
-        <NavLink to="staff">Staff</NavLink>
+        <NavLink to="list-staff">Staff</NavLink>
       </Menu.Item>
     </Menu>
   );
@@ -67,10 +68,11 @@ function SidebarManager() {
             </NavLink>
           </li>
           <li>
-            <Dropdown overlay={accountMenu} placement="bottomLeft" trigger={["click"]}>
+            <Dropdown overlay={accountMenu} trigger={["click"]}>
               <div className="SidebarManager__menu__item dropdown-toggle">
                 <UserOutlined className="icon" />
                 <span className="menu-text">Account</span>
+                <DownOutlined className="icon icon2" />
               </div>
             </Dropdown>
           </li>
