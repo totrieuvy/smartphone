@@ -1,123 +1,65 @@
 .SidebarManager {
   display: flex;
-  width: 100%;
-  height: 100%;
+  align-items: center;
+  padding: 0 16px;
+  position: relative;
 
-  &__menuButton {
-    display: none;
-    font-size: 24px;
-    color: #fff;
-    padding: 20px 2px;
-    background-color: #05386a;
-    cursor: pointer;
+  &__logo {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1001;
-  }
-
-  &__left {
-    width: 15%;
-    height: 100vh;
-    background-color: #05386a;
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-    transition: transform 0.3s ease;
-
-    &.open {
-      transform: translateX(0);
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-
-      li {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-
-        .SidebarManager__menu__item {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          color: #fff;
-          font-size: 20px;
-          text-decoration: none;
-          padding: 15px;
-          width: 100%;
-          transition: background-color 0.3s;
-
-          &:hover {
-            background-color: #388e3c;
-            cursor: pointer;
-          }
-
-          &.active-item {
-            background-color: #4caf50 !important;
-            color: #fff;
-          }
-        }
-
-        .dropdown-toggle {
-          cursor: pointer;
-        }
-      }
-
-      .icon {
-        font-size: 25px;
-      }
-
-      .menu-text {
-        display: inline;
-      }
-    }
-  }
-
-  .dropdown-toggle {
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
     display: flex;
     align-items: center;
-  }
 
-  &__right {
-    flex-grow: 1;
-  }
-
-  @media (max-width: 1100px) {
-    &__left {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 60%;
-      max-width: 250px;
+    img {
       height: 100%;
-      transform: translateX(-100%);
-      z-index: 1000;
-    }
-
-    &__menuButton {
-      display: block;
-    }
-
-    .menu-text {
-      display: none;
-    }
-
-    &__right {
-      width: 100%;
-      margin-left: 0;
+      object-fit: contain;
     }
   }
 
-  @media (max-width: 480px) {
-    &__left {
-      width: 80%;
+  &__user {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    position: absolute;
+    right: 16px;
+    gap: 0px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    img {
+      height: 40px;
+      margin-left: 10px;
+      object-fit: contain;
+    }
+  }
+}
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .SidebarManager {
+    display: flex;
+    justify-content: center;
+    &__logo {
+      position: static;
+      transform: none;
+      margin-bottom: 10px;
+    }
+
+    &__user {
+      position: static;
+      margin-left: 0;
+      margin-bottom: 10px;
+      justify-content: center; // Center user menu on small screens
+    }
+  }
+
+  .SidebarManager__user {
+    img {
+      height: 30px; // Adjust user icon size on smaller screens
     }
   }
 }
