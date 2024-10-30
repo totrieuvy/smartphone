@@ -1,43 +1,57 @@
 import { useState, useEffect } from "react";
-import { DesktopOutlined, PieChartOutlined, UserOutlined } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme, Dropdown } from "antd";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { DownOutlined } from "@ant-design/icons";
+import { DesktopOutlined, PieChartOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, Dropdown, theme } from "antd";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./SidebarManager.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem("Category", "category", <PieChartOutlined />),
-  getItem("Products", "products", <DesktopOutlined />),
-  getItem("Account", "account", <UserOutlined />, [
-    getItem(<Link to="total-account">Total</Link>, "total-account"),
-    getItem(<Link to="list-staff">Staff</Link>, "list-staff"),
-    getItem(<Link to="list-customer">Customer</Link>, "list-customer"),
-  ]),
-];
-
-const SidebarManager = () => {
+function SidebarManager() {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const location = useLocation();
+  // Sidebar menu items without embedding <Link>
+  const items = [
+    {
+      key: "category",
+      icon: <PieChartOutlined />,
+      label: "Category",
+    },
+    {
+      key: "products",
+      icon: <DesktopOutlined />,
+      label: "Products",
+    },
+    {
+      key: "account",
+      icon: <UserOutlined />,
+      label: "Account",
+      children: [
+        {
+          key: "total-account",
+          label: "Total",
+        },
+        {
+          key: "list-staff",
+          label: "Staff",
+        },
+        {
+          key: "list-customer",
+          label: "Customer",
+        },
+      ],
+    },
+  ];
+
   const breadcrumbItems = location.pathname
     .split("/")
     .filter((path) => path)
     .map((path, index, arr) => ({
-      title: <Link to={`/${arr.slice(0, index + 1).join("/")}`}>{path.charAt(0) + path.slice(1)}</Link>,
+      title: <Link to={`/${arr.slice(0, index + 1).join("/")}`}>{path.charAt(0).toUpperCase() + path.slice(1)}</Link>,
       key: index,
     }));
 
@@ -57,26 +71,28 @@ const SidebarManager = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setCollapsed(true); // Collapse the sidebar on small screens
-      } else {
-        setCollapsed(false); // Expand the sidebar on larger screens
-      }
+      setCollapsed(window.innerWidth < 768);
     };
-
     window.addEventListener("resize", handleResize);
-    handleResize(); // Call on mount to set the initial state
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const onMenuClick = ({ key }) => {
+    navigate(`/manager/${key}`);
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname.split("/").pop()]}
+          items={items}
+          onClick={onMenuClick}
+        />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} className="SidebarManager">
@@ -112,6 +128,6 @@ const SidebarManager = () => {
       </Layout>
     </Layout>
   );
-};
+}
 
 export default SidebarManager;

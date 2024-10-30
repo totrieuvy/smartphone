@@ -136,7 +136,13 @@ function Category() {
             Export to pdf
           </Button>
         </div>
-        <Table dataSource={dateSource} columns={columns} loading={fetching} className="Category__table" />
+        <Table
+          dataSource={dateSource}
+          columns={columns}
+          loading={fetching}
+          className="Category__table"
+          scroll={{ x: 600 }}
+        />
       </div>
       <Modal
         open={open}
