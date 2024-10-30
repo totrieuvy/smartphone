@@ -6,7 +6,7 @@ const AdminSidebar = () => {
     <aside id='sidebar' className='sidebar'>
       <ul className='sidebar-nav' id='sidebar-nav'>
         <li className='nav-item'>
-          <a href="/dashboard" className='nav-link'>
+          <a href="/admin/dashboard" className='nav-link'>
             <i className='bi bi-grid'></i>
             <span>Dashboard</span>
           </a>
@@ -27,13 +27,13 @@ const AdminSidebar = () => {
             className='nav-content collapse'  // Matching CSS for collapse content
             data-bs-parent='#sidebar-nav'>
             <li>
-              <a href="#">
+              <a href="/admin/adminuserlist">
                 <i className='bi bi-person'></i>
                 <span>User</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="/admin/adminstafflist">
                 <i className='bi bi-person'></i>
                 <span>Staff</span>
               </a>
@@ -56,7 +56,7 @@ const AdminSidebar = () => {
             className='nav-content collapse'  // Matching CSS for collapse content
             data-bs-parent='#sidebar-nav'>
             <li>
-              <a href="#">
+              <a href="/admin/adminaccount">
                 <i className='bi bi-person'></i>
                 <span>Your Account</span>
               </a>

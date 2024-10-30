@@ -8,6 +8,10 @@ import AdminApp from "./layout/AdminApp/AdminApp";
 import Total from "./pages/manager/account/total/Total";
 import Customer from "./pages/manager/account/customer/Customer";
 import Staff from "./pages/manager/account/staff/Staff";
+import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard'
+import StaffList from "./pages/admin/StaffList/StaffList";
+import UserList from "./pages/admin/UserList/UserList";
+import AdminAccount from "./pages/admin/AdminAccount/AdminAccount";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -54,6 +58,24 @@ function App() {
     {
       path: "/admin",
       element: <AdminApp />,
+      children: [
+        {
+          path: "dashboard",
+          element: <AdminDashboard />
+        },
+        {
+          path: "adminstafflist",
+          element: <StaffList />
+        },
+        {
+          path: "adminuserlist",
+          element: <UserList />
+        },
+        {
+          path: "adminaccount",
+          element: <AdminAccount />
+        },
+      ]
     },
     {
       path: "/test",
