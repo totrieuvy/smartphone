@@ -1,0 +1,43 @@
+.staff {
+  &__content {
+    &__title {
+      display: flex;
+      justify-content: center;
+      color: red;
+      padding: 20px;
+    }
+
+    &__table {
+      margin: 0 auto;
+      width: 80%;
+    }
+
+    &__button {
+      flex-wrap: wrap;
+      display: flex;
+      gap: 20px;
+      padding-bottom: 20px;
+      margin: 0 130px 0 130px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    &__content {
+      &__button {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  }
+
+  @media (max-width: 765px) {
+    &__content {
+      &__button {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  }
+}

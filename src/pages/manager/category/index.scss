@@ -9,11 +9,11 @@
   .Category__table {
     width: 80%;
     margin: 0 auto;
-    overflow-x: auto; // Add this to allow horizontal scrolling if needed
-    border-radius: 8px; // Optional: to add some styling
+    overflow-x: auto; 
+    border-radius: 8px;
 
     @media (max-width: 768px) {
-      width: 100%; // Make sure it takes full width on small screens
+      width: 100%; 
     }
   }
 
