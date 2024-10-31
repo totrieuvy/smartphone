@@ -168,19 +168,16 @@ function Staff() {
     console.log("Email: ", values.email);
     console.log("Deleting staff with values: ", values);
     try {
-      // Update staff to mark as banned
       await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
         status: false,
         reason_banned: values.reason_banned,
       });
 
-      // Prepare email parameters
       const templateParams = {
-        to_email: email, // Ensure this field is correctly populated
+        to_email: email,
         reason_banned: values.reason_banned,
       };
 
-      // Send email notification
       await emailjs.send("service_k2p1g8d", "template_hjnvc0e", templateParams, "bcPGKA4QICBzO0bg7").then(
         (response) => {
           console.log("Email sent successfully: ", response.status, response.text);
@@ -190,13 +187,11 @@ function Staff() {
         }
       );
 
-      // Notify success
       toast.success("Staff banned successfully");
     } catch (error) {
       console.error("Error during API call:", error.response?.data || error.message);
       toast.error("Failed to process the delete request. Check console for more details.");
     } finally {
-      // Reload data
       setEmail("");
       fetchData();
       setModalDelete(false);
