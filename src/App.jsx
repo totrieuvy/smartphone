@@ -13,6 +13,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import HeaderAndFooterTesting from './pages/Testing-Customer-Header-Footer/index';
+import Login from './pages/login/Login';
 
 function App() {
   const router = createBrowserRouter([
@@ -59,6 +60,16 @@ function App() {
     {
       path: "/test",
       element: <HeaderAndFooterTesting />,     
+      
+    },
+    {
+      path: "/login",
+      element: <Login />,     
+      
+    },
+    {
+      path: "/",
+      element: <Login />,     
       
     },
   ]);
