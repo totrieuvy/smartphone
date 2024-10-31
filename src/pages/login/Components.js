@@ -1,5 +1,31 @@
 import styled from 'styled-components';
 
+export const IconRow = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 15px; // Add some space below the icons
+`;
+
+export const SocialIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    background-color: #f6f5f7; // Set background color
+    color: #333; // Icon color
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+        background-color: #ddd; // Background color on hover
+        color: #ff416c; // Icon color on hover
+    }
+`;
 export const Container = styled.div`
 background-color: #fff;
 border-radius: 30px;
@@ -25,7 +51,7 @@ export const SignUpContainer = styled.div`
    opacity: 1;
    z-index: 5;
  `
-    : null}
+        : null}
 `;
 
 
@@ -107,7 +133,7 @@ z-index: 100;
     border-radius: 20px 20px 20px 20px;
 
 ${props =>
-    props.$signinIn !== true ? `transform: translateX(-100%);` : null}
+        props.$signinIn !== true ? `transform: translateX(-100%);` : null}
 `;
 
 export const Overlay = styled.div`
