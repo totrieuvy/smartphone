@@ -11,7 +11,7 @@ const UserList = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    axios.get('https://666a8f987013419182cfc970.mockapi.io/api/staffAndUser')
+    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account')
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -38,15 +38,9 @@ const UserList = () => {
   };
 
   const handleStatus = (status) => {
-    switch (status) {
-      case 'active':
-        return 'success';
-      case 'banned':
-        return 'danger';
-      default:
-        return 'success';
-    }
+    return status === true ? 'success' : 'danger';
   };
+
 
   return (
     <main id="main" className="main">
@@ -86,7 +80,7 @@ const UserList = () => {
                 <td>{user.role}</td>
                 <td>
                   <span className={`badge bg-${handleStatus(user.status)}`}>
-                    {user.status}
+                    {user.status ? 'Active' : 'Banned'}
                   </span>
                 </td>
                 <td className="d-flex align-items-center" style={{ marginTop: '-4px' }}>
