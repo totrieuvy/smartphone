@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pagination, InputGroup, FormControl, Dropdown, Button } from 'react-bootstrap';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
+import UserDetailModal from '../AdditionalSections/UserDetailModal/UserDetailModal';
 import axios from 'axios';
 import './UserList.css';
 
@@ -8,6 +9,8 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -41,6 +44,15 @@ const UserList = () => {
     return status === true ? 'success' : 'danger';
   };
 
+  const handleShowModal = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedUser(null);
+  };
 
   return (
     <main id="main" className="main">
@@ -84,7 +96,13 @@ const UserList = () => {
                   </span>
                 </td>
                 <td className="d-flex align-items-center" style={{ marginTop: '-4px' }}>
-                  <Button variant="link" className="custom-button me-2 text-decoration-none text-dark">View Detail</Button>
+                  <Button
+                    variant="link"
+                    className="custom-button me-2 text-decoration-none text-dark"
+                    onClick={() => handleShowModal(user)}
+                  >
+                    View Detail
+                  </Button>
                   <Dropdown align="end">
                     <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
                       &#8942;
@@ -111,6 +129,8 @@ const UserList = () => {
             </Pagination.Item>
           ))}
         </Pagination>
+
+        <UserDetailModal show={showModal} onClose={handleCloseModal} user={selectedUser} />
       </div>
     </main>
   );
