@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Pagination, InputGroup, FormControl, Dropdown, Button } from 'react-bootstrap';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import UserDetailModal from '../AdditionalSections/UserDetailModal/UserDetailModal';
+import { FaEye } from 'react-icons/fa'; // Import the necessary icons
 import axios from 'axios';
 import './UserList.css';
 
@@ -65,7 +66,7 @@ const UserList = () => {
             aria-label="Search"
             onChange={handleSearch}
           />
-          <InputGroup.Text>{`Showing ${filteredUsers.length} users(s)`}</InputGroup.Text>
+          <InputGroup.Text>{`Showing ${filteredUsers.length} user(s)`}</InputGroup.Text>
         </InputGroup>
 
         <table className='table table-borderless datatable'>
@@ -95,14 +96,13 @@ const UserList = () => {
                     {user.status ? 'Active' : 'Banned'}
                   </span>
                 </td>
-                <td className="d-flex align-items-center" style={{ marginTop: '-4px' }}>
-                  <Button
-                    variant="link"
-                    className="custom-button me-2 text-decoration-none text-dark"
+                <td className="d-flex align-items-center">
+                  <FaEye
+                    className="custom-icon me-3 text-dark"
                     onClick={() => handleShowModal(user)}
-                  >
-                    View Detail
-                  </Button>
+                    style={{ cursor: 'pointer' }}
+                    title="View Detail"
+                  />                 
                   <Dropdown align="end">
                     <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
                       &#8942;

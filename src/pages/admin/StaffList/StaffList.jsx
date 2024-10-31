@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEdit } from 'react-icons/fa'; // Import view and edit icons
 import { Pagination, InputGroup, FormControl, Dropdown, Button } from 'react-bootstrap';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import StaffDetailModal from '../AdditionalSections/StaffDetailModal/StaffDetailModal'
@@ -6,6 +8,7 @@ import axios from 'axios';
 import './StaffList.css';
 
 const UserList = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,6 +21,10 @@ const UserList = () => {
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
+
+  const handleEditClick = (userId) => {
+    navigate(`/admin/editstaff/${userId}`);
+  };
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -57,7 +64,16 @@ const UserList = () => {
 
   return (
     <main id="main" className="main">
-      <PageTitle page="Staff List" />
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <PageTitle page="Staff List" />
+        <Button
+          variant="primary"
+          onClick={() => navigate('/admin/addstaff')}
+          className="add-staff-button"
+        >
+          Add Staff
+        </Button>
+      </div>
 
       <div className="user-table-container">
         <InputGroup className="mb-3">
@@ -96,14 +112,19 @@ const UserList = () => {
                     {user.status ? 'Active' : 'Banned'}
                   </span>
                 </td>
-                <td className="d-flex align-items-center" style={{ marginTop: '-4px' }}>
-                  <Button
-                    variant="link"
-                    className="custom-button me-2 text-decoration-none text-dark"
+                <td className="d-flex align-items-center">
+                  <FaEye
+                    className="custom-icon me-3 text-dark"
                     onClick={() => handleShowModal(user)}
-                  >
-                    View Detail
-                  </Button>
+                    style={{ cursor: 'pointer' }}
+                    title="View Detail"
+                  />
+                  <FaEdit
+                    className="custom-icon me-2 text-dark"
+                    onClick={() => handleEditClick(user.id)} // Trigger navigation on click
+                    style={{ cursor: 'pointer' }}
+                    title="Edit"
+                  />
                   <Dropdown align="end">
                     <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
                       &#8942;

@@ -12,6 +12,8 @@ import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard'
 import StaffList from "./pages/admin/StaffList/StaffList";
 import UserList from "./pages/admin/UserList/UserList";
 import AdminAccount from "./pages/admin/AdminAccount/AdminAccount";
+import StaffAddForm from "./pages/admin/StaffAddForm/StaffAddForm";
+import StaffEditForm from "./pages/admin/StaffEditForm/StaffEditForm";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -67,6 +69,14 @@ function App() {
         {
           path: "adminstafflist",
           element: <StaffList />
+        },
+        {
+          path: "addstaff",
+          element: <StaffAddForm />
+        },
+        {
+          path: "editstaff/:userId",
+          element: <StaffEditForm />
         },
         {
           path: "adminuserlist",
