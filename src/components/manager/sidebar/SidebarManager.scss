@@ -1,3 +1,7 @@
+.link__manager {
+  text-decoration: none;
+}
+
 .SidebarManager {
   display: flex;
   align-items: center;
@@ -38,7 +42,6 @@
   }
 }
 
-// Responsive Styles
 @media (max-width: 768px) {
   .SidebarManager {
     display: flex;

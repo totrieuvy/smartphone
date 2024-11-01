@@ -14,7 +14,6 @@ function SidebarManager() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // Sidebar menu items without embedding <Link>
   const items = [
     {
       key: "category",
@@ -58,13 +57,19 @@ function SidebarManager() {
   const userMenu = (
     <Menu>
       <Menu.Item key="1">
-        <Link to="profile">Profile</Link>
+        <Link to="profile" className="link__manager">
+          Profile
+        </Link>
       </Menu.Item>
       <Menu.Item key="2">
-        <Link to="change-password">Change password</Link>
+        <Link to="change-password" className="link__manager">
+          Change password
+        </Link>
       </Menu.Item>
       <Menu.Item key="3">
-        <Link to="logout">Logout</Link>
+        <Link to="logout" className="link__manager">
+          Logout
+        </Link>
       </Menu.Item>
     </Menu>
   );
