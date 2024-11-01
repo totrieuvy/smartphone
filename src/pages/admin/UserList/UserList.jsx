@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Pagination, InputGroup, FormControl, Dropdown, Button } from 'react-bootstrap';
+import { Pagination, InputGroup, FormControl, Dropdown, Button, Modal, Form } from 'react-bootstrap';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import UserDetailModal from '../AdditionalSections/UserDetailModal/UserDetailModal';
-import { FaEye } from 'react-icons/fa'; // Import the necessary icons
+import { FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
+import { toast } from 'react-toastify';
 import './UserList.css';
 
 const UserList = () => {
@@ -12,6 +14,8 @@ const UserList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showBanUnbanModal, setShowBanUnbanModal] = useState(false);
+  const [reason, setReason] = useState('');
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -53,6 +57,52 @@ const UserList = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedUser(null);
+  };
+
+  const handleShowBanUnbanModal = (user) => {
+    setSelectedUser(user);
+    setShowBanUnbanModal(true);
+  };
+
+  const handleCloseBanUnbanModal = () => {
+    setShowBanUnbanModal(false);
+    setSelectedUser(null);
+    setReason('');
+  };
+
+  const handleBanUnban = () => {
+    const updatedStatus = !selectedUser.status;
+
+    // Update the user's status in the backend
+    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`, {
+      status: updatedStatus,
+    })
+      .then(() => {
+        toast.success(`${updatedStatus ? 'Unbanned' : 'Banned'} successfully`);
+        setUsers(users.map(user => 
+          user.id === selectedUser.id ? { ...user, status: updatedStatus } : user
+        ));
+
+        // Send email notification
+        emailjs.send('service_8ee1x3i', 'template_qacetss', {
+          user_email: selectedUser.email,
+          user_name: selectedUser.name,
+          message: reason,
+        }, 'pdYoew3qMLB5A3txi')
+          .then(() => {
+            toast.success('Notification sent successfully');
+          })
+          .catch((error) => {
+            console.error('Failed to send email', error);
+            toast.error('Failed to send email. Please try again.');
+          });
+
+        handleCloseBanUnbanModal();
+      })
+      .catch((error) => {
+        console.error('Failed to update user status:', error);
+        toast.error('Failed to update user status');
+      });
   };
 
   return (
@@ -102,13 +152,15 @@ const UserList = () => {
                     onClick={() => handleShowModal(user)}
                     style={{ cursor: 'pointer' }}
                     title="View Detail"
-                  />                 
+                  />
                   <Dropdown align="end">
                     <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
                       &#8942;
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item>Change Status</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShowBanUnbanModal(user)}>
+                        {user.status ? 'Ban' : 'Unban'}
+                      </Dropdown.Item>
                       <Dropdown.Item className="text-danger">Delete</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -131,6 +183,53 @@ const UserList = () => {
         </Pagination>
 
         <UserDetailModal show={showModal} onClose={handleCloseModal} user={selectedUser} />
+
+        {/* Ban/Unban Modal */}
+        <Modal show={showBanUnbanModal} onHide={handleCloseBanUnbanModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedUser?.status ? 'Ban' : 'Unban'} User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="user_name"
+                  defaultValue={selectedUser?.name || ''}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="user_email"
+                  defaultValue={selectedUser?.email || ''}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formReason">
+                <Form.Label>Reason</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="message"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>
+              Close
+            </Button>
+            <Button variant="danger" onClick={handleBanUnban}>
+              {selectedUser?.status ? 'Ban' : 'Unban'}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </main>
   );
