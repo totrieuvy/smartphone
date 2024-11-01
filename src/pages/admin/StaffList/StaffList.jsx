@@ -16,8 +16,9 @@ const UserList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [showBanUnbanModal, setShowBanUnbanModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // New state for delete modal
   const [selectedUser, setSelectedUser] = useState(null);
-  const [email, setEmail] = useState(''); // New state for editable email
+  const [email, setEmail] = useState('');
   const [reason, setReason] = useState('');
   const itemsPerPage = 12;
 
@@ -68,7 +69,7 @@ const UserList = () => {
 
   const handleShowBanUnbanModal = (user) => {
     setSelectedUser(user);
-    setEmail(user.email); // Set initial email in state when showing modal
+    setEmail(user.email);
     setShowBanUnbanModal(true);
   };
 
@@ -78,8 +79,20 @@ const UserList = () => {
     setReason('');
   };
 
+  const handleShowDeleteModal = (user) => {
+    setSelectedUser(user);
+    setEmail(user.email);
+    setReason(''); // Clear reason input when opening modal
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedUser(null);
+    setReason('');
+  };
+
   const handleBanUnban = () => {
-    // Update the user's status in your backend
     axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`, {
       status: !selectedUser.status,
     })
@@ -87,9 +100,6 @@ const UserList = () => {
         toast.success(`${selectedUser.status ? 'Banned' : 'Unbanned'} successfully`);
         setUsers(users.map(user => user.id === selectedUser.id ? { ...user, status: !user.status } : user));
 
-        console.log(email);
-
-        // Send email notification
         emailjs.send('service_8ee1x3i', 'template_qacetss', {
           user_email: email,
           user_name: selectedUser.name,
@@ -98,15 +108,41 @@ const UserList = () => {
         .then(() => {
           toast.success('Notification sent successfully');
         })
-          .catch((error) => {
-            console.error('Failed to send email', error); // Log the error correctly
-            toast.error('Failed to send email. Please try again.');
-          });
+        .catch((error) => {
+          console.error('Failed to send email', error);
+          toast.error('Failed to send email. Please try again.');
+        });
 
         handleCloseBanUnbanModal();
       })
       .catch(() => {
         toast.error('Failed to update user status');
+      });
+  };
+
+  const handleDeleteUser = () => {
+    axios.delete(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`)
+      .then(() => {
+        toast.success('User deleted successfully');
+        setUsers(users.filter(user => user.id !== selectedUser.id));
+
+        emailjs.send('service_8ee1x3i', 'template_qacetss', {
+          user_email: email,
+          user_name: selectedUser.name,
+          message: `Your account has been deleted for the following reason: ${reason}`,
+        }, 'pdYoew3qMLB5A3txi')
+        .then(() => {
+          toast.success('Deletion notification sent successfully');
+        })
+        .catch((error) => {
+          console.error('Failed to send email', error);
+          toast.error('Failed to send email. Please try again.');
+        });
+
+        handleCloseDeleteModal();
+      })
+      .catch(() => {
+        toast.error('Failed to delete user');
       });
   };
 
@@ -181,7 +217,7 @@ const UserList = () => {
                       <Dropdown.Item onClick={() => handleShowBanUnbanModal(user)}>
                         {user.status ? 'Ban' : 'Unban'}
                       </Dropdown.Item>
-                      <Dropdown.Item className="text-danger">Delete</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShowDeleteModal(user)} className="text-danger">Delete</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </td>
@@ -201,56 +237,57 @@ const UserList = () => {
             </Pagination.Item>
           ))}
         </Pagination>
-
-        <StaffDetailModal show={showModal} onClose={handleCloseModal} user={selectedUser} />
-
-        {/* Ban/Unban Modal */}
-        <Modal show={showBanUnbanModal} onHide={handleCloseBanUnbanModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{selectedUser?.status ? 'Ban' : 'Unban'} Staff</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="user_name"
-                  defaultValue={selectedUser?.name || ''} // Fallback to an empty string if selectedUser is null
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="user_email"
-                  defaultValue={selectedUser?.email || ''} // Fallback to an empty string if selectedUser is null
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formReason">
-                <Form.Label>Reason</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="message"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>
-              Close
-            </Button>
-            <Button variant="danger" onClick={handleBanUnban}>
-              {selectedUser?.status ? 'Ban' : 'Unban'}
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
+
+      {/* Staff Detail Modal */}
+      <StaffDetailModal show={showModal} onHide={handleCloseModal} user={selectedUser} />
+
+      {/* Ban/Unban Modal */}
+      <Modal show={showBanUnbanModal} onHide={handleCloseBanUnbanModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedUser?.status ? 'Ban User' : 'Unban User'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to {selectedUser?.status ? 'ban' : 'unban'} {selectedUser?.name}?</p>
+          <Form.Group controlId="reason">
+            <Form.Label>Reason</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter the reason for banning/unbanning"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Cancel</Button>
+          <Button variant="primary" onClick={handleBanUnban}>Confirm</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete {selectedUser?.name}?</p>
+          <Form.Group controlId="reason">
+            <Form.Label>Reason for Deletion</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter the reason for deletion"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              required
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>Cancel</Button>
+          <Button variant="danger" onClick={handleDeleteUser}>Delete</Button>
+        </Modal.Footer>
+      </Modal>
     </main>
   );
 };

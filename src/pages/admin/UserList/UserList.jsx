@@ -15,6 +15,7 @@ const UserList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showBanUnbanModal, setShowBanUnbanModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [reason, setReason] = useState('');
   const itemsPerPage = 12;
 
@@ -70,6 +71,17 @@ const UserList = () => {
     setReason('');
   };
 
+  const handleShowDeleteModal = (user) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedUser(null);
+    setReason('');
+  };
+
   const handleBanUnban = () => {
     const updatedStatus = !selectedUser.status;
 
@@ -102,6 +114,35 @@ const UserList = () => {
       .catch((error) => {
         console.error('Failed to update user status:', error);
         toast.error('Failed to update user status');
+      });
+  };
+
+  const handleDeleteUser = () => {
+    // Remove the user from the backend
+    axios.delete(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`)
+      .then(() => {
+        toast.success('User deleted successfully');
+        setUsers(users.filter(user => user.id !== selectedUser.id));
+
+        // Optionally, send an email notification for deletion
+        emailjs.send('service_8ee1x3i', 'template_qacetss', {
+          user_email: selectedUser.email,
+          user_name: selectedUser.name,
+          message: reason,
+        }, 'pdYoew3qMLB5A3txi')
+          .then(() => {
+            toast.success('Deletion notification sent successfully');
+          })
+          .catch((error) => {
+            console.error('Failed to send email', error);
+            toast.error('Failed to send email. Please try again.');
+          });
+
+        handleCloseDeleteModal();
+      })
+      .catch((error) => {
+        console.error('Failed to delete user:', error);
+        toast.error('Failed to delete user');
       });
   };
 
@@ -161,7 +202,7 @@ const UserList = () => {
                       <Dropdown.Item onClick={() => handleShowBanUnbanModal(user)}>
                         {user.status ? 'Ban' : 'Unban'}
                       </Dropdown.Item>
-                      <Dropdown.Item className="text-danger">Delete</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShowDeleteModal(user)} className="text-danger">Delete</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </td>
@@ -214,20 +255,45 @@ const UserList = () => {
                 <Form.Control
                   as="textarea"
                   rows={3}
-                  name="message"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
+                  placeholder="Enter the reason..."
+                  required
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>
-              Close
+            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Close</Button>
+            <Button variant="primary" onClick={handleBanUnban}>
+              {selectedUser?.status ? 'Ban' : 'Unban'} User
             </Button>
-            <Button variant="danger" onClick={handleBanUnban}>
-              {selectedUser?.status ? 'Ban' : 'Unban'}
-            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to delete this user?</p>
+            <p>Name: <strong>{selectedUser?.name}</strong></p>
+            <Form.Group className="mb-3" controlId="formDeleteReason">
+              <Form.Label>Reason for deletion</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Enter the reason for deletion..."
+                required
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseDeleteModal}>Cancel</Button>
+            <Button variant="danger" onClick={handleDeleteUser}>Delete</Button>
           </Modal.Footer>
         </Modal>
       </div>
