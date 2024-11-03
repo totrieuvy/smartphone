@@ -1,0 +1,28 @@
+.ManagerProfile {
+  &__title {
+    text-align: center;
+    color: red;
+    margin-bottom: 20px;
+  }
+
+  &__content {
+    margin: 0 auto;
+    background-color: #f5f5f5;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .total__button {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

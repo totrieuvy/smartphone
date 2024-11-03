@@ -50,7 +50,7 @@ function SidebarManager() {
     .split("/")
     .filter((path) => path)
     .map((path, index, arr) => ({
-      title: <Link to={`/${arr.slice(0, index + 1).join("/")}`}>{path.charAt(0).toUpperCase() + path.slice(1)}</Link>,
+      title: <Link to={`/${arr.slice(0, index + 1).join("/")}`}>{path.charAt(0) + path.slice(1)}</Link>,
       key: index,
     }));
 
