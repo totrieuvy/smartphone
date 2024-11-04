@@ -23,20 +23,19 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch categories from MoocAPI
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "https://669475034bd61d8314c77f1a.mockapi.io/khanh"
+        const categoryResponse = await fetch(
+          "https://6692a166346eeafcf46da14d.mockapi.io/category"
         );
-        const data = await response.json();
-        const categoryData = data.map((product) => product.category);
-        const uniqueCategories = Array.from(new Set(categoryData));
-        setCategories(uniqueCategories);
+        const categoriesData = await categoryResponse.json();
+        setCategories(categoriesData);
 
-        if (!paramCategory) {
-          const firstCategory = uniqueCategories[0];
-          navigate(`/category/${firstCategory}`, { replace: true });
+        // Set default category for navigation if none is selected
+        if (!paramCategory && categoriesData.length > 0) {
+          navigate(`/category/${categoriesData[0].id}`, { replace: true });
         }
       } catch (err) {
         setError("Failed to fetch categories");
@@ -48,16 +47,17 @@ const HomePage = () => {
     fetchCategories();
   }, [paramCategory, navigate]);
 
+  // Fetch products based on selected category
   useEffect(() => {
     if (paramCategory) {
       const fetchProducts = async () => {
         setLoadingProducts(true);
         try {
-          const response = await fetch(
+          const productResponse = await fetch(
             "https://669475034bd61d8314c77f1a.mockapi.io/khanh"
           );
-          const data = await response.json();
-          const categoryProducts = data.filter(
+          const productsData = await productResponse.json();
+          const categoryProducts = productsData.filter(
             (product) => product.category === paramCategory
           );
           setProducts(categoryProducts);
@@ -107,9 +107,9 @@ const HomePage = () => {
         <nav className="navbar">
           <ul>
             {categories.map((category) => (
-              <li key={category}>
-                <Link to={`/category/${category}`}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+              <li key={category.id}>
+                <Link to={`/category/${category.id}`}>
+                  {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
                 </Link>
               </li>
             ))}
@@ -126,7 +126,7 @@ const HomePage = () => {
               <div key={product.id} className="product-card">
                 <img src={product.img} alt={product.name} />
                 <h2>{product.name}</h2>
-                <p>Prices: ${product.price.toFixed(2)}</p>
+                <p>Price: ${product.price.toFixed(2)}</p>
                 <p>Stock: {product.stock}</p>
                 <Link to={`/product/${product.id}`}>View Specifications</Link>
               </div>
