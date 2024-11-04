@@ -36,7 +36,7 @@ const StaffAddForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://6692a166346eeafcf46da14d.mockapi.io/account', formData);
+      await axios.post('https://6678e6e40bd452505620352b.mockapi.io/Accounts', formData);
       alert('Staff added successfully!');
       navigate('/admin/adminstafflist');
     } catch (error) {

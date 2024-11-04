@@ -23,7 +23,7 @@ const UserList = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account')
+    axios.get('https://6678e6e40bd452505620352b.mockapi.io/Accounts')
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -40,9 +40,10 @@ const UserList = () => {
   const filteredUsers = users
     .filter(user => user.role === 'staff')
     .filter(user =>
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.role.toLowerCase().includes(search.toLowerCase())
+      user.name?.toLowerCase().includes(search.toLowerCase()) ||
+      user.role?.toLowerCase().includes(search.toLowerCase())
     );
+
 
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
@@ -93,7 +94,7 @@ const UserList = () => {
   };
 
   const handleBanUnban = () => {
-    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`, {
+    axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`, {
       status: !selectedUser.status,
     })
       .then(() => {
@@ -105,13 +106,13 @@ const UserList = () => {
           user_name: selectedUser.name,
           message: reason,
         }, 'pdYoew3qMLB5A3txi')
-        .then(() => {
-          toast.success('Notification sent successfully');
-        })
-        .catch((error) => {
-          console.error('Failed to send email', error);
-          toast.error('Failed to send email. Please try again.');
-        });
+          .then(() => {
+            toast.success('Notification sent successfully');
+          })
+          .catch((error) => {
+            console.error('Failed to send email', error);
+            toast.error('Failed to send email. Please try again.');
+          });
 
         handleCloseBanUnbanModal();
       })
@@ -121,7 +122,7 @@ const UserList = () => {
   };
 
   const handleDeleteUser = () => {
-    axios.delete(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`)
+    axios.delete(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`)
       .then(() => {
         toast.success('User deleted successfully');
         setUsers(users.filter(user => user.id !== selectedUser.id));
@@ -131,13 +132,13 @@ const UserList = () => {
           user_name: selectedUser.name,
           message: `Your account has been deleted for the following reason: ${reason}`,
         }, 'pdYoew3qMLB5A3txi')
-        .then(() => {
-          toast.success('Deletion notification sent successfully');
-        })
-        .catch((error) => {
-          console.error('Failed to send email', error);
-          toast.error('Failed to send email. Please try again.');
-        });
+          .then(() => {
+            toast.success('Deletion notification sent successfully');
+          })
+          .catch((error) => {
+            console.error('Failed to send email', error);
+            toast.error('Failed to send email. Please try again.');
+          });
 
         handleCloseDeleteModal();
       })
@@ -174,8 +175,8 @@ const UserList = () => {
             <tr>
               <th scope='col'>ID</th>
               <th scope='col'>Name</th>
-              <th scope='col'>Phone</th>
               <th scope='col'>Email</th>
+              <th scope='col'>Create Date</th>
               <th scope='col'>Role</th>
               <th scope='col'>Status</th>
               <th scope='col'>Action</th>
@@ -187,9 +188,9 @@ const UserList = () => {
                 <th scope='row'>
                   <a href="#" className="custom-link">{user.id}</a>
                 </th>
-                <td>{user.name}</td>
-                <td>{user.phone}</td>
+                <td>{user.username}</td>
                 <td>{user.email}</td>
+                <td>{user.created_date}</td>
                 <td>{user.role}</td>
                 <td>
                   <span className={`badge bg-${handleStatus(user.status)}`}>
@@ -240,30 +241,53 @@ const UserList = () => {
       </div>
 
       {/* Staff Detail Modal */}
-      <StaffDetailModal show={showModal} onHide={handleCloseModal} user={selectedUser} />
+      <StaffDetailModal show={showModal} onClose={handleCloseModal} user={selectedUser} />
 
       {/* Ban/Unban Modal */}
       <Modal show={showBanUnbanModal} onHide={handleCloseBanUnbanModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedUser?.status ? 'Ban User' : 'Unban User'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to {selectedUser?.status ? 'ban' : 'unban'} {selectedUser?.name}?</p>
-          <Form.Group controlId="reason">
-            <Form.Label>Reason</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter the reason for banning/unbanning"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Cancel</Button>
-          <Button variant="primary" onClick={handleBanUnban}>Confirm</Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedUser?.status ? 'Ban' : 'Unban'} Staff</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="user_name"
+                  defaultValue={selectedUser?.username || ''}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="user_email"
+                  defaultValue={selectedUser?.email || ''}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formReason">
+                <Form.Label>Reason</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="Enter the reason..."
+                  required
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Close</Button>
+            <Button variant="primary" onClick={handleBanUnban}>
+              {selectedUser?.status ? 'Ban' : 'Unban'} User
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
@@ -271,7 +295,7 @@ const UserList = () => {
           <Modal.Title>Delete User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to delete {selectedUser?.name}?</p>
+          <p>Are you sure you want to delete {selectedUser?.username}?</p>
           <Form.Group controlId="reason">
             <Form.Label>Reason for Deletion</Form.Label>
             <Form.Control

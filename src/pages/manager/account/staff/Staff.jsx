@@ -101,7 +101,7 @@ function Staff() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://6692a166346eeafcf46da14d.mockapi.io/account");
+      const response = await axios.get("https://6678e6e40bd452505620352b.mockapi.io/Accounts");
       const staffData = response.data.filter((dataStaff) => dataStaff.role === "staff");
       setData(staffData);
       setFetching(false);
@@ -133,7 +133,7 @@ function Staff() {
     setLoading(true);
     try {
       if (isUpdate && id) {
-        await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+        await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
           name: values.name,
           phone: values.phone,
           email: values.email,
@@ -141,7 +141,7 @@ function Staff() {
         });
         toast.success("Update staff successfully");
       } else {
-        await axios.post("https://6692a166346eeafcf46da14d.mockapi.io/account", {
+        await axios.post("https://6678e6e40bd452505620352b.mockapi.io/Accounts", {
           name: values.name,
           phone: values.phone,
           password: values.password,
@@ -168,7 +168,7 @@ function Staff() {
     console.log("Email: ", values.email);
     console.log("Deleting staff with values: ", values);
     try {
-      await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+      await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
         status: false,
         reason_banned: values.reason_banned,
       });

@@ -22,7 +22,7 @@ function Customer() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://6692a166346eeafcf46da14d.mockapi.io/account");
+      const response = await axios.get("https://6678e6e40bd452505620352b.mockapi.io/Accounts");
       const filterUser = response.data.filter((user) => user.role === "user");
       setDataSource(filterUser);
     } catch (error) {
@@ -129,7 +129,7 @@ function Customer() {
   const handleFinish = async (values) => {
     setLoading(true);
     try {
-      await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+      await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
         name: values.name,
         phone: values.phone,
         email: values.email,
@@ -146,7 +146,7 @@ function Customer() {
 
   const handleDelete = async (id, values) => {
     try {
-      await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+      await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
         reason_banned: values.reason_banned,
         status: false,
       });

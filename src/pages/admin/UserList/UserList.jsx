@@ -20,7 +20,7 @@ const UserList = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account')
+    axios.get('https://6678e6e40bd452505620352b.mockapi.io/Accounts')
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -31,10 +31,10 @@ const UserList = () => {
   };
 
   const filteredUsers = users
-    .filter(user => user.role === 'user')
+    .filter(user => user.role === 'customer')
     .filter(user =>
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.role.toLowerCase().includes(search.toLowerCase())
+      user.name?.toLowerCase().includes(search.toLowerCase()) ||
+      user.role?.toLowerCase().includes(search.toLowerCase())
     );
 
   const indexOfLastUser = currentPage * itemsPerPage;
@@ -86,7 +86,7 @@ const UserList = () => {
     const updatedStatus = !selectedUser.status;
 
     // Update the user's status in the backend
-    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`, {
+    axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`, {
       status: updatedStatus,
     })
       .then(() => {
@@ -119,7 +119,7 @@ const UserList = () => {
 
   const handleDeleteUser = () => {
     // Remove the user from the backend
-    axios.delete(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`)
+    axios.delete(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`)
       .then(() => {
         toast.success('User deleted successfully');
         setUsers(users.filter(user => user.id !== selectedUser.id));
@@ -165,8 +165,8 @@ const UserList = () => {
             <tr>
               <th scope='col'>ID</th>
               <th scope='col'>Name</th>
-              <th scope='col'>Phone</th>
               <th scope='col'>Email</th>
+              <th scope='col'>Create Date</th>
               <th scope='col'>Role</th>
               <th scope='col'>Status</th>
               <th scope='col'>Action</th>
@@ -178,9 +178,9 @@ const UserList = () => {
                 <th scope='row'>
                   <a href="#" className="custom-link">{user.id}</a>
                 </th>
-                <td>{user.name}</td>
-                <td>{user.phone}</td>
+                <td>{user.username}</td>
                 <td>{user.email}</td>
+                <td>{user.created_date}</td>
                 <td>{user.role}</td>
                 <td>
                   <span className={`badge bg-${handleStatus(user.status)}`}>
@@ -237,7 +237,7 @@ const UserList = () => {
                 <Form.Control
                   type="text"
                   name="user_name"
-                  defaultValue={selectedUser?.name || ''}
+                  defaultValue={selectedUser?.username || ''}
                   readOnly
                 />
               </Form.Group>
@@ -278,7 +278,7 @@ const UserList = () => {
           </Modal.Header>
           <Modal.Body>
             <p>Are you sure you want to delete this user?</p>
-            <p>Name: <strong>{selectedUser?.name}</strong></p>
+            <p>Name: <strong>{selectedUser?.username}</strong></p>
             <Form.Group className="mb-3" controlId="formDeleteReason">
               <Form.Label>Reason for deletion</Form.Label>
               <Form.Control

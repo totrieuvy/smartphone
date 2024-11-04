@@ -20,7 +20,7 @@ const StaffEditForm = () => {
 
   // Fetch staff data on component mount
   useEffect(() => {
-    axios.get(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`)
+    axios.get(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${userId}`)
       .then(response => {
         setFormData(response.data); // Set form data with fetched staff data
       })
@@ -45,7 +45,7 @@ const StaffEditForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`, formData)
+    axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${userId}`, formData)
       .then(() => {
         navigate('/admin/adminstafflist'); // Redirect after saving
       })

@@ -28,7 +28,7 @@ function ManagerProfile() {
   const handleFinish = async (values) => {
     setLoading(true);
     try {
-      await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+      await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
         name: values.name,
         phone: values.phone,
         email: values.email,
