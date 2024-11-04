@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import SidebarManager from "./components/manager/sidebar/SidebarManager";
 import ManagerProfile from "./pages/manager/profile/ManagerProfile";
 import ErrorPage from "./pages/error/ErrorPage";
@@ -8,7 +9,7 @@ import AdminApp from "./layout/AdminApp/AdminApp";
 import Total from "./pages/manager/account/total/Total";
 import Customer from "./pages/manager/account/customer/Customer";
 import Staff from "./pages/manager/account/staff/Staff";
-import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard'
+import AdminDashboard from "./pages/admin/AdminDashboard/AdminDashboard";
 import StaffList from "./pages/admin/StaffList/StaffList";
 import UserList from "./pages/admin/UserList/UserList";
 import AdminAccount from "./pages/admin/AdminAccount/AdminAccount";
@@ -16,14 +17,36 @@ import StaffAddForm from "./pages/admin/StaffAddForm/StaffAddForm";
 import StaffEditForm from "./pages/admin/StaffEditForm/StaffEditForm";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import HeaderAndFooterTesting from './pages/Testing-Customer-Header-Footer/index';
-import Login from './pages/login/Login';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import HeaderAndFooterTesting from "./pages/Testing-Customer-Header-Footer/index";
+import Login from "./pages/login/Login";
 import TermsOfService from "./pages/login/TermsOfService";
 
+import HomePage from "./pages/customer/HomePage/HomePage.jsx";
+import ProductDetail from "./pages/customer/HomePageDetail/ProductDetails.jsx";
+
+import CustomerApp from "./layout/CustomerApp/CustomerApp.jsx";
 function App() {
   const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <CustomerApp />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to="/category/phone" replace />,
+        },
+        {
+          path: "category/:category",
+          element: <HomePage />,
+        },
+        {
+          path: "product/:id",
+          element: <ProductDetail />,
+        },
+      ],
+    },
     {
       path: "*",
       element: <ErrorPage />,
@@ -65,50 +88,46 @@ function App() {
       children: [
         {
           path: "dashboard",
-          element: <AdminDashboard />
+          element: <AdminDashboard />,
         },
         {
           path: "adminstafflist",
-          element: <StaffList />
+          element: <StaffList />,
         },
         {
           path: "addstaff",
-          element: <StaffAddForm />
+          element: <StaffAddForm />,
         },
         {
           path: "editstaff/:userId",
-          element: <StaffEditForm />
+          element: <StaffEditForm />,
         },
         {
           path: "adminuserlist",
-          element: <UserList />
+          element: <UserList />,
         },
         {
           path: "adminaccount",
-          element: <AdminAccount />
+          element: <AdminAccount />,
         },
-      ]
+      ],
     },
     {
       path: "/test",
-      element: <HeaderAndFooterTesting />,     
-      
+      element: <HeaderAndFooterTesting />,
     },
     {
       path: "/login",
       element: <Login />,
-   
     },
 
     {
       path: "/",
-      element: <Login />,     
-     
+      element: <Login />,
     },
     {
       path: "/terms",
-      element: <TermsOfService />,     
-     
+      element: <TermsOfService />,
     },
   ]);
   return <RouterProvider router={router} />;
