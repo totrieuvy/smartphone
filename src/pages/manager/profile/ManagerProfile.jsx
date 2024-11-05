@@ -12,16 +12,20 @@ function ManagerProfile() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const account = localStorage.getItem("account");
+    const account = localStorage.getItem("user");
     if (account) {
       const accountJSON = JSON.parse(account);
+      const userData = accountJSON.user;
       console.log(accountJSON);
-      setId(accountJSON.id);
-      form.setFieldsValue({
-        name: accountJSON.name,
-        email: accountJSON.email,
-        phone: accountJSON.phone,
-      });
+      console.log("user data: ", userData);
+      setId(userData.id);
+      setTimeout(() => {
+        form.setFieldsValue({
+          name: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+        });
+      }, 0);
     }
   }, [form]);
 
@@ -74,19 +78,6 @@ function ManagerProfile() {
               {
                 type: "email",
                 message: "Invalid email!!!",
-              },
-            ]}
-          >
-            <Input disabled={!editMode} />
-          </Form.Item>
-          <Form.Item
-            className="input"
-            name="phone"
-            label="Phone"
-            rules={[
-              {
-                required: true,
-                message: "Phone cannot be null!!!",
               },
             ]}
           >

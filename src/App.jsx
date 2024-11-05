@@ -65,7 +65,7 @@ function App() {
           element: <Category />,
         },
         {
-          path: "product",
+          path: "products",
           element: <Product />,
         },
         {
