@@ -13,9 +13,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          "https://669475034bd61d8314c77f1a.mockapi.io/khanh"
-        );
+        const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
         const data = await response.json();
         const selectedProduct = data.find((prod) => prod.id === parseInt(id));
         setProduct(selectedProduct);
@@ -53,49 +51,104 @@ const ProductDetails = () => {
       <div className="specifications-container">
         <div className="specifications-column">
           <h1 className="title">Thông số nổi bật</h1>
-          {Object.entries(product.specifications)
-            .slice(
-              0,
-              Math.ceil(Object.entries(product.specifications).length / 2)
-            )
-            .map(([key, value], index) => (
-              <div key={key}>
-                <span className="key">{capitalizeFirstLetter(key)}:</span>
-                <div className="value-container">
-                  <strong className="value">{value}</strong>
-                </div>
-                {index === 0 && (
-                  <div className="text">
-                    Tìm hiểu kích thước màn hình điện thoại Android
-                  </div>
-                )}
-                {index === 1 && (
-                  <div className="text">
-                    Camera điện thoại Android có gì đặc biệt?
-                  </div>
-                )}
-                {index === 2 && (
-                  <div className="text">
-                    Bạn cần RAM bao nhiêu trên điện thoại Android?
-                  </div>
-                )}
-              </div>
-            ))}
-        </div>
-
-        <div className="specifications-columns">
-          {Object.entries(product.specifications)
-            .slice(Math.ceil(Object.entries(product.specifications).length / 2))
-            .map(([key, value]) => (
-              <div key={key}>
-                {capitalizeFirstLetter(key)}: <strong>{value}</strong>
-              </div>
-            ))}
-          <div>
-            Thiết kế: 165.2 x 71.9 x 6.9 mm
-            <br />
-            Trọng lượng sản phẩm: 183 g
-          </div>
+          {product.screen_size && (
+            <div>
+              <span className="key">Kích thước màn hình:</span>
+              <strong className="value">{product.screen_size}</strong>
+              <div className="text">Trải nghiệm hình ảnh sắc nét hơn với màn hình lớn.</div>
+            </div>
+          )}
+          {product.battery && product.battery !== "0" && (
+            <div>
+              <span className="key">Dung lượng pin:</span>
+              <strong className="value">{product.battery}</strong>
+              <div className="text">Pin lâu giúp bạn sử dụng cả ngày dài mà không cần sạc.</div>
+            </div>
+          )}
+          {product.camera && (
+            <div>
+              <span className="key">Camera:</span>
+              <strong className="value">{product.camera}</strong>
+              <div className="text">Chụp ảnh chất lượng cao với camera sắc nét.</div>
+            </div>
+          )}
+          {product.processor && (
+            <div>
+              <span className="key">Bộ xử lý:</span>
+              <strong className="value">{product.processor}</strong>
+              <div className="text">Hiệu năng mạnh mẽ giúp chạy mượt mà các ứng dụng.</div>
+            </div>
+          )}
+          {product.ram && (
+            <div>
+              <span className="key">RAM:</span>
+              <strong className="value">{product.ram}</strong>
+              <div className="text">Đảm bảo khả năng đa nhiệm mượt mà.</div>
+            </div>
+          )}
+          {product.storage && (
+            <div>
+              <span className="key">Bộ nhớ:</span>
+              <strong className="value">{product.storage}</strong>
+              <div className="text">Lưu trữ đủ cho tất cả ứng dụng và dữ liệu của bạn.</div>
+            </div>
+          )}
+          {product.operating_system && (
+            <div>
+              <span className="key">Hệ điều hành:</span>
+              <strong className="value">{product.operating_system}</strong>
+              <div className="text">Mang đến trải nghiệm người dùng tốt nhất.</div>
+            </div>
+          )}
+          {product.resolution && (
+            <div>
+              <span className="key">Độ phân giải:</span>
+              <strong className="value">{product.resolution}</strong>
+              <div className="text">Trải nghiệm hình ảnh sắc nét với độ phân giải cao.</div>
+            </div>
+          )}
+          {product.smart_tv && (
+            <div>
+              <span className="key">Smart TV:</span>
+              <strong className="value">Có</strong>
+              <div className="text">Khám phá thế giới giải trí với Smart TV tích hợp.</div>
+            </div>
+          )}
+          {product.refresh_rate && (
+            <div>
+              <span className="key">Tần số quét:</span>
+              <strong className="value">{product.refresh_rate}</strong>
+              <div className="text">Trải nghiệm hình ảnh mượt mà hơn với tần số quét cao.</div>
+            </div>
+          )}
+          {product.hdmi_ports > 0 && (
+            <div>
+              <span className="key">Cổng HDMI:</span>
+              <strong className="value">{product.hdmi_ports}</strong>
+              <div className="text">Kết nối dễ dàng với các thiết bị khác.</div>
+            </div>
+          )}
+          {product.water_resistant && (
+            <div>
+              <span className="key">Chống nước:</span>
+              <strong className="value">Có</strong>
+              <div className="text">An tâm khi sử dụng gần nước.</div>
+            </div>
+          )}
+          {product.heart_rate_monitor && (
+            <div>
+              <span className="key">Đo nhịp tim:</span>
+              <strong className="value">Có</strong>
+              <div className="text">Theo dõi sức khỏe của bạn mọi lúc mọi nơi.</div>
+            </div>
+          )}
+          {product.gps && (
+            <div>
+              <span className="key">GPS:</span>
+              <strong className="value">Có</strong>
+              <div className="text">Dẫn đường chính xác và tiện lợi.</div>
+            </div>
+          )}
         </div>
       </div>
 
