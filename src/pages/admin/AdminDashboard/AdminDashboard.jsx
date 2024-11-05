@@ -2,9 +2,9 @@ import React, {useState , useEffect} from 'react'
 import axios from 'axios';
 import './AdminDashboard.css'
 
-import "./AdminDashboard.css"
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle'
 import Card from '../AdditionalSections/Card/Card';
+import Report from '../AdditionalSections/Report/REport';
 
 const AdminDashboard = () => {
   const [cards, setCards] = useState([])
@@ -25,6 +25,9 @@ const AdminDashboard = () => {
             cards && cards.length > 0 &&
             cards.map(card => <Card key={card._id} card={card}/>)
           }
+          <div className="col-12">
+            <Report/>
+          </div>
         </div>
       </section>
     </main>

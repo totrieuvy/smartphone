@@ -35,7 +35,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <Navigate to="/category/phone" replace />,
+          element: <Navigate to="/category/1" replace />,
         },
         {
           path: "category/:category",
@@ -86,6 +86,10 @@ function App() {
       path: "/admin",
       element: <AdminApp />,
       children: [
+        {
+          index: true,
+          element: <AdminDashboard />,
+        },
         {
           path: "dashboard",
           element: <AdminDashboard />,
