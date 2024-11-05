@@ -60,22 +60,25 @@ const StaffAddForm = () => {
               <input type="text" className="form-control" id="name" name="name" value={formData.name} onChange={handleChange} required />
             </div>
             <div className="mb-3">
+              <label htmlFor="create_date" className="form-label">Create Date</label>
+              <input type="date" className="form-control" id="create_date" name="create_date" value={formData.create_date} onChange={handleChange} required />
+            </div>          
+            <div className="mb-3">
+              <label htmlFor="status" className="form-label">Status</label>
+              <select className="form-select" id="status" name="status" value={formData.status} onChange={handleChange} required>
+                <option value={true}>Active</option>
+                <option value={false}>Banned</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-md-6">
+          <div className="mb-3">
               <label htmlFor="email" className="form-label">Email</label>
               <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} required />
             </div>
             <div className="mb-3">
               <label htmlFor="role" className="form-label">Role</label>
               <input type="text" className="form-control" id="role" name="role" value={formData.role} onChange={handleChange} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="salary" className="form-label">Salary</label>
-              <input type="number" className="form-control" id="salary" name="salary" value={formData.salary} onChange={handleChange} required />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label htmlFor="phone" className="form-label">Phone</label>
-              <input type="text" className="form-control" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
             </div>
             <div className="mb-3 password-input-container">
               <label htmlFor="password" className="form-label">Password</label>
@@ -94,18 +97,6 @@ const StaffAddForm = () => {
               >
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="create_date" className="form-label">Create Date</label>
-              <input type="date" className="form-control" id="create_date" name="create_date" value={formData.create_date} onChange={handleChange} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="status" className="form-label">Status</label>
-              <select className="form-select" id="status" name="status" value={formData.status} onChange={handleChange} required>
-                <option value={true}>Active</option>
-                <option value={false}>Banned</option>
-              </select>
             </div>
           </div>
         </div>

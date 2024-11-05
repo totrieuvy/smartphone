@@ -77,13 +77,13 @@ const StaffEditForm = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="createDate" className="form-label">Create Date</label>
               <input
-                type="email"
+                type="date"
                 className="form-control"
-                id="email"
-                name="email"
-                value={formData.email}
+                id="createDate"
+                name="createDate"
+                value={formData.createDate}
                 onChange={handleChange}
                 required
               />
@@ -100,29 +100,17 @@ const StaffEditForm = () => {
                 required
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="salary" className="form-label">Salary</label>
-              <input
-                type="number"
-                className="form-control"
-                id="salary"
-                name="salary"
-                value={formData.salary}
-                onChange={handleChange}
-                required
-              />
-            </div>
           </div>
 
           <div className="col-md-6">
             <div className="mb-3">
-              <label htmlFor="phone" className="form-label">Phone</label>
+              <label htmlFor="email" className="form-label">Email</label>
               <input
-                type="tel"
+                type="email"
                 className="form-control"
-                id="phone"
-                name="phone"
-                value={formData.phone}
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
@@ -145,18 +133,7 @@ const StaffEditForm = () => {
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
-            <div className="mb-3">
-              <label htmlFor="createDate" className="form-label">Create Date</label>
-              <input
-                type="date"
-                className="form-control"
-                id="createDate"
-                name="createDate"
-                value={formData.createDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
+
           </div>
         </div>
 
