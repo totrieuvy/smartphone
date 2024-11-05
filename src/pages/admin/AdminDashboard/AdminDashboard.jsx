@@ -5,6 +5,7 @@ import './AdminDashboard.css'
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle'
 import Card from '../AdditionalSections/Card/Card';
 import Report from '../AdditionalSections/Report/REport';
+import RecentSales from '../AdditionalSections/RecentSales/RecentSales';
 
 const AdminDashboard = () => {
   const [cards, setCards] = useState([])
@@ -27,6 +28,9 @@ const AdminDashboard = () => {
           }
           <div className="col-12">
             <Report/>
+          </div>
+          <div className="col-12">
+            <RecentSales/>
           </div>
         </div>
       </section>
