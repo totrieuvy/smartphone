@@ -27,9 +27,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categoryResponse = await fetch(
-          "https://6692a166346eeafcf46da14d.mockapi.io/category"
-        );
+        const categoryResponse = await fetch("https://6692a166346eeafcf46da14d.mockapi.io/category");
         const categoriesData = await categoryResponse.json();
         setCategories(categoriesData);
 
@@ -53,13 +51,9 @@ const HomePage = () => {
       const fetchProducts = async () => {
         setLoadingProducts(true);
         try {
-          const productResponse = await fetch(
-            "https://669475034bd61d8314c77f1a.mockapi.io/khanh"
-          );
+          const productResponse = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
           const productsData = await productResponse.json();
-          const categoryProducts = productsData.filter(
-            (product) => product.category === paramCategory
-          );
+          const categoryProducts = productsData.filter((product) => product.category === paramCategory);
           setProducts(categoryProducts);
         } catch (err) {
           setError("Failed to fetch products");

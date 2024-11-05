@@ -22,7 +22,7 @@ function Customer() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://6678e6e40bd452505620352b.mockapi.io/Accounts");
+      const response = await axios.get("https://6692a166346eeafcf46da14d.mockapi.io/account");
       const filterUser = response.data.filter((user) => user.role === "user");
       setDataSource(filterUser);
     } catch (error) {
