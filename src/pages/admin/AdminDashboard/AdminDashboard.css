@@ -3,7 +3,7 @@
     padding: 20px 30px;
     transition: all 0.3s;
     background-color: #EEEFF4;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 @media (max-width: 1199px){

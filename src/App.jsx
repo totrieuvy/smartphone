@@ -87,6 +87,10 @@ function App() {
       element: <AdminApp />,
       children: [
         {
+          index: true,
+          element: <AdminDashboard />,
+        },
+        {
           path: "dashboard",
           element: <AdminDashboard />,
         },
