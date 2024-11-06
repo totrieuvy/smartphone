@@ -15,7 +15,10 @@ const ProductDetails = () => {
       try {
         const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
         const data = await response.json();
-        const selectedProduct = data.find((prod) => prod.id === parseInt(id));
+        console.log("Data from API:", data);
+        console.log("Product ID from URL:", id);
+
+        const selectedProduct = data.find((prod) => prod.id === id); // So sánh chuỗi với chuỗi
         setProduct(selectedProduct);
       } catch (err) {
         setError("Failed to fetch product details");
