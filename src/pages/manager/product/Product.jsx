@@ -125,9 +125,16 @@ function Product() {
   ];
 
   const handleDelete = async (id) => {
-    await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, {
-      status: false,
-    });
+    try {
+      await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, {
+        status: false,
+      });
+      toast.success("delete product success");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      fetchProducts();
+    }
   };
 
   const handleCloseModal = () => {
