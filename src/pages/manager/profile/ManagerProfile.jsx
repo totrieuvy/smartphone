@@ -12,34 +12,43 @@ function ManagerProfile() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const account = localStorage.getItem("user");
+    // Get user ID from local storage
+    const account = localStorage.getItem("account");
     if (account) {
       const accountJSON = JSON.parse(account);
-      const userData = accountJSON.user;
-      console.log(accountJSON);
-      console.log("user data: ", userData);
-      setId(userData.id);
-      setTimeout(() => {
-        form.setFieldsValue({
-          name: userData.username,
-          email: userData.email,
-          phone: userData.phone,
-        });
-      }, 0);
+      const userId = accountJSON.user.id;
+      setId(userId);
+
+      // Fetch user data from the API based on the ID
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`);
+          const userData = response.data;
+          // Set form fields with the fetched data
+          form.setFieldsValue({
+            username: userData.username,
+            email: userData.email,
+          });
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      };
+
+      fetchUserData();
     }
   }, [form]);
 
   const handleFinish = async (values) => {
     setLoading(true);
     try {
-      await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
-        name: values.name,
-        phone: values.phone,
+      await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+        username: values.username,
         email: values.email,
       });
-      toast.success("Update profile successfully");
+      toast.success("Profile updated successfully");
     } catch (error) {
-      console.log(error);
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
     } finally {
       setLoading(false);
       setEditMode(false);
@@ -54,7 +63,7 @@ function ManagerProfile() {
       <div className="ManagerProfile__content">
         <Form form={form} labelCol={{ span: 24 }} onFinish={handleFinish}>
           <Form.Item
-            name="name"
+            name="username"
             label="Name"
             className="input"
             rules={[
@@ -92,7 +101,7 @@ function ManagerProfile() {
                   </Button>
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" loading={loading}>
                     Save
                   </Button>
                 </Form.Item>

@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Modal, Popconfirm, Select, Table } from "antd";
+import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Switch, Table } from "antd";
 import { useEffect, useState } from "react";
 import "./index.scss";
 import axios from "axios";
@@ -12,10 +12,12 @@ function Product() {
   const [categories, setCategories] = useState([]);
   const [input, setInput] = useState("");
   const [open, setOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [form] = useForm();
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null); // To store the selected product for details view
 
   const fetchProducts = async () => {
     try {
@@ -104,17 +106,29 @@ function Product() {
             title="Delete product"
             description="Are you sure to delete this product?"
             onConfirm={() => handleDelete(id)}
-            okText="Yes"
+            okText="Delete"
             cancelText="No"
           >
-            <Button danger>Delete</Button>
+            <DeleteOutlined style={{ cursor: "pointer" }} />
           </Popconfirm>
-          <DeleteOutlined style={{ cursor: "pointer" }} />
-          <UnorderedListOutlined style={{ cursor: "pointer" }} />
+
+          <UnorderedListOutlined
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSelectedProduct(record); // Set the selected product for the detail modal
+              setDetailOpen(true); // Open the detail modal
+            }}
+          />
         </div>
       ),
     },
   ];
+
+  const handleDelete = async (id) => {
+    await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, {
+      status: false,
+    });
+  };
 
   const handleCloseModal = () => {
     setOpen(false);
@@ -124,37 +138,25 @@ function Product() {
   const handleFinish = async (values) => {
     setLoading(true);
     try {
+      const finalValues = Object.keys(values).reduce((acc, key) => {
+        if (key === "status" && !id) {
+          // Nếu là POST (không có id), mặc định status là true
+          acc[key] = values[key] !== undefined ? values[key] : true;
+        } else if (typeof values[key] === "boolean") {
+          // Nếu là boolean, mặc định là false
+          acc[key] = values[key] !== undefined ? values[key] : false;
+        } else {
+          // Các giá trị khác mặc định là null nếu không có giá trị
+          acc[key] = values[key] !== undefined && values[key] !== "" ? values[key] : null;
+        }
+        return acc;
+      }, {});
       if (id && isUpdated) {
-        await axios.put(`https://669475034bd61d8314c77f1a.mockapi.io/khanh/${id}`, {
-          name: values.name,
-          category: values.category,
-          brand: values.brand,
-          price: values.price,
-          stock: values.stock,
-          img: values.img,
-          screen_size: values.screen_size,
-          battery: values.battery,
-          camera: values.camera,
-          processor: values.processor,
-          ram: values.ram,
-          storage: values.storage,
-        });
+        await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, values);
         toast.success("Update product success");
       } else {
-        await axios.post("https://669475034bd61d8314c77f1a.mockapi.io/khanh", {
-          name: values.name,
-          category: values.category,
-          brand: values.brand,
-          price: values.price,
-          stock: values.stock,
-          img: values.img,
-          screen_size: values.screen_size,
-          battery: values.battery,
-          camera: values.camera,
-          processor: values.processor,
-          ram: values.ram,
-          storage: values.storage,
-        });
+        await axios.post("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product", finalValues);
+        console.log(finalValues);
         toast.success("Add product success");
       }
     } catch (error) {
@@ -164,6 +166,117 @@ function Product() {
       fetchProducts();
       handleCloseModal();
     }
+  };
+
+  const renderProductDetails = () => {
+    const product = selectedProduct;
+
+    if (!product) return null;
+
+    return (
+      <div>
+        {product.name && (
+          <p>
+            <strong>Name:</strong> {product.name}
+          </p>
+        )}
+        {product.category && product.category !== "null" && (
+          <p>
+            <strong>Category:</strong> {categoryMap[product.category]}
+          </p>
+        )}
+        {product.brand && (
+          <p>
+            <strong>Brand:</strong> {product.brand}
+          </p>
+        )}
+        {product.price && product.price !== 0 && (
+          <p>
+            <strong>Price:</strong> {product.price}
+          </p>
+        )}
+        {product.stock !== undefined && product.stock !== null && product.stock >= 0 && (
+          <p>
+            <strong>Stock:</strong> {product.stock}
+          </p>
+        )}
+        {product.img && (
+          <p>
+            <strong>Image:</strong> <img src={product.img} alt="product" width={100} />
+          </p>
+        )}
+        {product.screen_size && (
+          <p>
+            <strong>Screen Size:</strong> {product.screen_size}
+          </p>
+        )}
+        {product.battery && (
+          <p>
+            <strong>Battery:</strong> {product.battery}
+          </p>
+        )}
+        {product.camera && (
+          <p>
+            <strong>Camera:</strong> {product.camera}
+          </p>
+        )}
+        {product.processor && (
+          <p>
+            <strong>Processor:</strong> {product.processor}
+          </p>
+        )}
+        {product.ram && (
+          <p>
+            <strong>RAM:</strong> {product.ram}
+          </p>
+        )}
+        {product.storage && (
+          <p>
+            <strong>Storage:</strong> {product.storage}
+          </p>
+        )}
+        {product.operating_system && (
+          <p>
+            <strong>Operating System:</strong> {product.operating_system}
+          </p>
+        )}
+        {product.resolution && (
+          <p>
+            <strong>Resolution:</strong> {product.resolution}
+          </p>
+        )}
+        {product.smart_tv && (
+          <p>
+            <strong>Smart TV:</strong> Yes
+          </p>
+        )}
+        {product.refresh_rate && (
+          <p>
+            <strong>Refresh Rate:</strong> {product.refresh_rate}
+          </p>
+        )}
+        {product.hdmi_ports && product.hdmi_ports > 0 && (
+          <p>
+            <strong>HDMI Ports:</strong> {product.hdmi_ports}
+          </p>
+        )}
+        {product.water_resistant && (
+          <p>
+            <strong>Water Resistant:</strong> Yes
+          </p>
+        )}
+        {product.heart_rate_monitor && (
+          <p>
+            <strong>Heart Rate Monitor:</strong> Yes
+          </p>
+        )}
+        {product.gps && (
+          <p>
+            <strong>GPS:</strong> Yes
+          </p>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -197,32 +310,24 @@ function Product() {
         />
       </div>
       <Modal
-        open={open}
-        title={isUpdated ? "Update product" : "Add new product"}
+        visible={open}
+        title={isUpdated ? "Edit Product" : "Add Product"}
+        okText="Save"
+        cancelText="Cancel"
         onCancel={handleCloseModal}
-        footer={[
-          <Button key="back" onClick={handleCloseModal}>
-            Return
-          </Button>,
-          <Button key="submit" type="primary" onClick={() => form.submit()} loading={loading}>
-            {isUpdated ? "Update" : "Add"}
-          </Button>,
-        ]}
+        onOk={() => form.submit()}
       >
-        <Form form={form} labelCol={{ span: 24 }} onFinish={handleFinish}>
+        <Form form={form} layout="vertical" onFinish={handleFinish}>
+          {/* Basic Information */}
           <Form.Item
             name="name"
-            label="Product name"
-            rules={[
-              {
-                required: true,
-                message: "Name cannot be null!!!",
-              },
-            ]}
+            label="Product Name"
+            rules={[{ required: true, message: "Please input product name!" }]}
           >
-            <Input placeholder="Enter product name" />
+            <Input />
           </Form.Item>
-          <Form.Item label="Danh mục" name="category" rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}>
+
+          <Form.Item label="Category" name="category" rules={[{ required: true, message: "Category cannot null" }]}>
             <Select
               placeholder="Category"
               options={categories.map((category) => ({
@@ -231,127 +336,133 @@ function Product() {
               }))}
             />
           </Form.Item>
-          <Form.Item
-            name="brand"
-            label="Brand"
-            rules={[
-              {
-                required: true,
-                message: "Brand cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter brand" />
+
+          <Form.Item name="brand" label="Brand" rules={[{ required: true, message: "Please input the brand!" }]}>
+            <Input />
           </Form.Item>
-          <Form.Item
-            name="price"
-            label="Price"
-            rules={[
-              {
-                required: true,
-                message: "price cannot be null!!!",
-              },
-            ]}
-          >
-            <InputNumber placeholder="Enter price" />
-          </Form.Item>
-          <Form.Item
-            name="stock"
-            label="Quantity"
-            rules={[
-              {
-                required: true,
-                message: "quantity cannot be null!!!",
-              },
-            ]}
-          >
-            <InputNumber placeholder="Enter quantity" />
-          </Form.Item>
-          <Form.Item
-            name="img"
-            label="Image"
-            rules={[
-              {
-                required: true,
-                message: "Image cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter Image" />
-          </Form.Item>
-          <Form.Item
-            name="screen_size"
-            label="Screen size"
-            rules={[
-              {
-                required: true,
-                message: "Screen size cannot be null!!!",
-              },
-            ]}
-          >
-            <InputNumber placeholder="Enter Screen size" />
-          </Form.Item>
-          <Form.Item
-            name="battery"
-            label="Battery"
-            rules={[
-              {
-                required: true,
-                message: "battery cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter battery" />
-          </Form.Item>
-          <Form.Item
-            name="camera"
-            label="Camera"
-            rules={[
-              {
-                required: true,
-                message: "camera cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter camera" />
-          </Form.Item>
-          <Form.Item
-            name="processor"
-            label="Processor"
-            rules={[
-              {
-                required: true,
-                message: "processor cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter processor" />
-          </Form.Item>
-          <Form.Item
-            name="ram"
-            label="Ram"
-            rules={[
-              {
-                required: true,
-                message: "ram cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter ram" />
-          </Form.Item>
-          <Form.Item
-            name="storage"
-            label="Storage"
-            rules={[
-              {
-                required: true,
-                message: "storage cannot be null!!!",
-              },
-            ]}
-          >
-            <Input placeholder="Enter storage" />
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="price" label="Price" rules={[{ required: true, message: "Please input the price!" }]}>
+                <InputNumber style={{ width: "100%" }} min={0} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="stock" label="Stock" rules={[{ required: true, message: "Please input stock!" }]}>
+                <InputNumber style={{ width: "100%" }} min={0} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="img" label="Image URL" rules={[{ required: true, message: "Please input image URL!" }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="screen_size"
+                label="Screen Size"
+                rules={[{ required: true, message: "Please input screen size!" }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="battery" label="Battery">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="camera" label="Camera">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="processor" label="Processor">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="ram" label="RAM">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="storage" label="Storage">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="operating_system" label="Operating System">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="resolution" label="Resolution">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="smart_tv" label="Smart TV" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="refresh_rate" label="Refresh Rate">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="hdmi_ports" label="HDMI Ports">
+                <InputNumber style={{ width: "100%" }} min={0} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item name="water_resistant" label="Water Resistant" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="heart_rate_monitor" label="Heart Rate Monitor" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="gps" label="GPS" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item name="status" label="Product Status" valuePropName="checked">
+            <Switch />
           </Form.Item>
         </Form>
+      </Modal>
+
+      {/* Modal for product details */}
+      <Modal visible={detailOpen} title="Product Details" onCancel={() => setDetailOpen(false)} footer={null}>
+        {renderProductDetails()}
       </Modal>
     </div>
   );
