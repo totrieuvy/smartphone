@@ -23,7 +23,7 @@ const UserList = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    axios.get('https://6678e6e40bd452505620352b.mockapi.io/Accounts')
+    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account')
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -94,7 +94,7 @@ const UserList = () => {
   };
 
   const handleBanUnban = () => {
-    axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`, {
+    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`, {
       status: !selectedUser.status,
     })
       .then(() => {
@@ -122,7 +122,7 @@ const UserList = () => {
   };
 
   const handleDeleteUser = () => {
-    axios.delete(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${selectedUser.id}`)
+    axios.delete(`https://6692a166346eeafcf46da14d.mockapi.io/account/${selectedUser.id}`)
       .then(() => {
         toast.success('User deleted successfully');
         setUsers(users.filter(user => user.id !== selectedUser.id));
@@ -175,8 +175,8 @@ const UserList = () => {
             <tr>
               <th scope='col'>ID</th>
               <th scope='col'>Name</th>
+              <th scope='col'>Phone</th>
               <th scope='col'>Email</th>
-              <th scope='col'>Create Date</th>
               <th scope='col'>Role</th>
               <th scope='col'>Status</th>
               <th scope='col'>Action</th>
@@ -189,9 +189,9 @@ const UserList = () => {
                   <a href="#" className="custom-link">{user.id}</a>
                 </th>
                 <td>{user.username}</td>
+                <td>{user.phone}</td>
                 <td>{user.email}</td>
-                <td>{user.created_date}</td>
-                <td>{user.role}</td>
+                <td>{user.role}</td>             
                 <td>
                   <span className={`badge bg-${handleStatus(user.status)}`}>
                     {user.status ? 'Active' : 'Banned'}
@@ -245,49 +245,49 @@ const UserList = () => {
 
       {/* Ban/Unban Modal */}
       <Modal show={showBanUnbanModal} onHide={handleCloseBanUnbanModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{selectedUser?.status ? 'Ban' : 'Unban'} Staff</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="user_name"
-                  defaultValue={selectedUser?.username || ''}
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="user_email"
-                  defaultValue={selectedUser?.email || ''}
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formReason">
-                <Form.Label>Reason</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  placeholder="Enter the reason..."
-                  required
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Close</Button>
-            <Button variant="primary" onClick={handleBanUnban}>
-              {selectedUser?.status ? 'Ban' : 'Unban'} User
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedUser?.status ? 'Ban' : 'Unban'} Staff</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="formName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="user_name"
+                defaultValue={selectedUser?.username || ''}
+                readOnly
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="user_email"
+                defaultValue={selectedUser?.email || ''}
+                readOnly
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formReason">
+              <Form.Label>Reason</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Enter the reason..."
+                required
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseBanUnbanModal}>Close</Button>
+          <Button variant="primary" onClick={handleBanUnban}>
+            {selectedUser?.status ? 'Ban' : 'Unban'} User
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>

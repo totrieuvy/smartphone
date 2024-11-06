@@ -9,7 +9,7 @@ const StaffEditForm = () => {
   const { userId } = useParams(); // Get userId from route params
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     role: '',
     salary: '',
@@ -20,9 +20,12 @@ const StaffEditForm = () => {
 
   // Fetch staff data on component mount
   useEffect(() => {
-    axios.get(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${userId}`)
+    axios.get(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`)
       .then(response => {
-        setFormData(response.data); // Set form data with fetched staff data
+        setFormData(prevData => ({
+          ...prevData,
+          ...response.data // Merge existing defaults with fetched data
+        }));
       })
       .catch(error => {
         console.error("There was an error fetching the staff data!", error);
@@ -45,7 +48,7 @@ const StaffEditForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${userId}`, formData)
+    axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`, formData)
       .then(() => {
         navigate('/admin/adminstafflist'); // Redirect after saving
       })
@@ -69,21 +72,21 @@ const StaffEditForm = () => {
               <input
                 type="text"
                 className="form-control"
-                id="name"
-                name="name"
-                value={formData.name}
+                id="username"
+                name="username"
+                value={formData.username || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="createDate" className="form-label">Create Date</label>
+              <label htmlFor="email" className="form-label">Email</label>
               <input
-                type="date"
+                type="email"
                 className="form-control"
-                id="createDate"
-                name="createDate"
-                value={formData.createDate}
+                id="email"
+                name="email"
+                value={formData.email || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />
@@ -95,7 +98,19 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="role"
                 name="role"
-                value={formData.role}
+                value={formData.role || ''} // Ensure controlled input
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="salary" className="form-label">Salary</label>
+              <input
+                type="number"
+                className="form-control"
+                id="salary"
+                name="salary"
+                value={formData.salary || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />
@@ -104,13 +119,13 @@ const StaffEditForm = () => {
 
           <div className="col-md-6">
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="phone" className="form-label">Phone</label>
               <input
-                type="email"
+                type="tel"
                 className="form-control"
-                id="email"
-                name="email"
-                value={formData.email}
+                id="phone"
+                name="phone"
+                value={formData.phone || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />
@@ -122,7 +137,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="password"
                 name="password"
-                value={formData.password}
+                value={formData.password || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />
@@ -133,7 +148,18 @@ const StaffEditForm = () => {
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
-
+            <div className="mb-3">
+              <label htmlFor="createDate" className="form-label">Create Date</label>
+              <input
+                type="date"
+                className="form-control"
+                id="createDate"
+                name="createDate"
+                value={formData.createDate || ''} // Ensure controlled input
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
         </div>
 

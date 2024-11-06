@@ -18,16 +18,16 @@ const UserDetailModal = ({ show, onClose, user }) => {
                                     <Form.Control type="text" value={user.id} readOnly />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="text" value={user.email} readOnly />
+                                    <Form.Label>Phone</Form.Label>
+                                    <Form.Control type="text" value={user.phone} readOnly />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Role</Form.Label>
                                     <Form.Control type="text" value={user.role} readOnly />
                                 </Form.Group>    
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="text" value={user.password} readOnly />
+                                    <Form.Label>Create Date</Form.Label>
+                                    <Form.Control type="text" value={user.create_date} readOnly />
                                 </Form.Group>                        
                             </div>
                             <div className="right-column">
@@ -42,7 +42,11 @@ const UserDetailModal = ({ show, onClose, user }) => {
                                 <Form.Group className="mb-3">
                                     <Form.Label>Status</Form.Label>
                                     <Form.Control type="text" value={user.status ? 'Active' : 'Banned'} readOnly />
-                                </Form.Group>                               
+                                </Form.Group>         
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Salary</Form.Label>
+                                    <Form.Control type="text" value={user.salary} readOnly />
+                                </Form.Group>                      
                             </div>
                         </div>
                     </Form>
