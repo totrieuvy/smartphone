@@ -12,7 +12,9 @@
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   height: 100vh;
-  margin: -20px 0 50px;
+  margin: -20px 0;
 }
 
 /* Wrap all other login-specific styles with the .login-container class */
+/* ShopSection.css */
+

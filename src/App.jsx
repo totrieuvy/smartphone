@@ -20,13 +20,13 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import HeaderAndFooterTesting from "./pages/Testing-Customer-Header-Footer/index";
-import Login from "./pages/login/Login";
-import TermsOfService from "./pages/login/TermsOfService";
+
 
 import HomePage from "./pages/customer/HomePage/HomePage.jsx";
 import ProductDetail from "./pages/customer/HomePageDetail/ProductDetails.jsx";
 
 import CustomerApp from "./layout/CustomerApp/CustomerApp.jsx";
+import LoginPage from './pages/login/login-page';
 function App() {
   const router = createBrowserRouter([
     {
@@ -122,17 +122,11 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <LoginPage />,
     },
 
-    {
-      path: "/",
-      element: <Login />,
-    },
-    {
-      path: "/terms",
-      element: <TermsOfService />,
-    },
+  
+    
   ]);
   return <RouterProvider router={router} />;
 }

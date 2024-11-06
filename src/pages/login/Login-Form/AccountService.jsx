@@ -1,7 +1,7 @@
 // AccountService.jsx
 import axios from 'axios';
 
-const API_URL = "https://6678e6e40bd452505620352b.mockapi.io/Accounts";
+const API_URL = "https://6692a166346eeafcf46da14d.mockapi.io/account";
 
 export const fetchAccounts = async () => {
     try {
