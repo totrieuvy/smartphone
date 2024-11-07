@@ -1,0 +1,30 @@
+.admin-account-form {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-account-form .form-control,
+.admin-account-form .form-select {
+    border-radius: 5px;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.password-input-container input {
+    padding-right: 2rem;
+    /* Ensure input text doesn't overlap with the icon */
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 70%;
+    /* Adjusts vertical alignment */
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    /* Optional: makes the icon a soft gray */
+}
