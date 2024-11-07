@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 import SidebarManager from "./components/manager/sidebar/SidebarManager";
 import ManagerProfile from "./pages/manager/profile/ManagerProfile";
 import ErrorPage from "./pages/error/ErrorPage";
@@ -21,12 +21,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import HeaderAndFooterTesting from "./pages/Testing-Customer-Header-Footer/index";
 
-
 import HomePage from "./pages/customer/HomePage/HomePage.jsx";
 import ProductDetail from "./pages/customer/HomePageDetail/ProductDetails.jsx";
 
 import CustomerApp from "./layout/CustomerApp/CustomerApp.jsx";
-import LoginPage from './pages/login/login-page';
+import LoginPage from "./pages/login/login-page";
+import ChangePassword from "./pages/manager/change-password/index.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -80,6 +80,10 @@ function App() {
           path: "list-staff",
           element: <Staff />,
         },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        },
       ],
     },
     {
@@ -124,9 +128,6 @@ function App() {
       path: "/login",
       element: <LoginPage />,
     },
-
-  
-    
   ]);
   return <RouterProvider router={router} />;
 }
