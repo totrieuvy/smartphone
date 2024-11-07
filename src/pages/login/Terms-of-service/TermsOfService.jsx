@@ -7,7 +7,7 @@ import './TermsOfService.css';
 const TermsOfService = forwardRef((props, ref) => {
     const { inView, ref: inViewRef } = useInView({
         triggerOnce: true,
-        threshold: 0.1,
+        threshold: 0.5,
     });
 
     // Combine the refs so that both `inViewRef` and the passed `ref` work together

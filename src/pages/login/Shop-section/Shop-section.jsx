@@ -10,7 +10,7 @@ const ShopSection = () => {
     // useInView hook to track if the section is in view
     const { ref, inView } = useInView({
         triggerOnce: false, // Only trigger once
-        threshold: 0.5, // Trigger when 10% of the section is in view
+        threshold: 0.5, // Trigger when 50% of the section is in view
     });
 
     // useSpring hook to animate opacity and transform
