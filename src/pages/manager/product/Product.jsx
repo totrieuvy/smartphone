@@ -17,7 +17,7 @@ function Product() {
   const [form] = useForm();
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState(null); // To store the selected product for details view
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const fetchProducts = async () => {
     try {
@@ -115,8 +115,8 @@ function Product() {
           <UnorderedListOutlined
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setSelectedProduct(record); // Set the selected product for the detail modal
-              setDetailOpen(true); // Open the detail modal
+              setSelectedProduct(record);
+              setDetailOpen(true);
             }}
           />
         </div>
@@ -147,13 +147,10 @@ function Product() {
     try {
       const finalValues = Object.keys(values).reduce((acc, key) => {
         if (key === "status" && !id) {
-          // Nếu là POST (không có id), mặc định status là true
           acc[key] = values[key] !== undefined ? values[key] : true;
         } else if (typeof values[key] === "boolean") {
-          // Nếu là boolean, mặc định là false
           acc[key] = values[key] !== undefined ? values[key] : false;
         } else {
-          // Các giá trị khác mặc định là null nếu không có giá trị
           acc[key] = values[key] !== undefined && values[key] !== "" ? values[key] : null;
         }
         return acc;
@@ -467,7 +464,6 @@ function Product() {
         </Form>
       </Modal>
 
-      {/* Modal for product details */}
       <Modal visible={detailOpen} title="Product Details" onCancel={() => setDetailOpen(false)} footer={null}>
         {renderProductDetails()}
       </Modal>
