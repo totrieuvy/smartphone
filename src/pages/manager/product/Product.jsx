@@ -21,7 +21,7 @@ function Product() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
+      const response = await axios.get("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
       const sortedProducts = response.data.sort((a, b) => b.id - a.id);
       setProducts(sortedProducts);
     } catch (error) {
@@ -126,7 +126,7 @@ function Product() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, {
+      await axios.put(`https://669475034bd61d8314c77f1a.mockapi.io/khanh/${id}`, {
         status: false,
       });
       toast.success("delete product success");
@@ -156,10 +156,10 @@ function Product() {
         return acc;
       }, {});
       if (id && isUpdated) {
-        await axios.put(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/product/${id}`, values);
+        await axios.put(`https://669475034bd61d8314c77f1a.mockapi.io/khanh/${id}`, values);
         toast.success("Update product success");
       } else {
-        await axios.post("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product", finalValues);
+        await axios.post("https://669475034bd61d8314c77f1a.mockapi.io/khanh", finalValues);
         console.log(finalValues);
         toast.success("Add product success");
       }

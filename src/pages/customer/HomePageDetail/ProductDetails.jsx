@@ -13,7 +13,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
+        const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
         const data = await response.json();
         console.log("Data from API:", data);
         console.log("Product ID from URL:", id);
