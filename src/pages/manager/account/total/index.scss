@@ -1,0 +1,36 @@
+.pie {
+  width: 100%;
+  height: 430px;
+
+  h2 {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    color: red;
+    text-transform: uppercase;
+    margin: 10px 10px 20px 10px;
+  }
+
+  @media (max-width: 768px) {
+    .pie {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 352px) {
+    .pie {
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      h2 {
+        display: flex;
+        justify-content: center;
+        height: 290px;
+      }
+    }
+  }
+}

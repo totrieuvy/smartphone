@@ -55,24 +55,31 @@ function SidebarManager() {
     }));
 
   const userMenu = (
-    <Menu>
-      <Menu.Item key="1">
+    <Menu
+      onClick={({ key }) => {
+        if (key === "logout") handleLogout();
+      }}
+    >
+      <Menu.Item key="profile">
         <Link to="profile" className="link__manager">
           Profile
         </Link>
       </Menu.Item>
-      <Menu.Item key="2">
+      <Menu.Item key="change-password">
         <Link to="change-password" className="link__manager">
           Change password
         </Link>
       </Menu.Item>
-      <Menu.Item key="3">
-        <Link to="logout" className="link__manager">
-          Logout
-        </Link>
+      <Menu.Item key="logout">
+        <span className="link__manager">Logout</span>
       </Menu.Item>
     </Menu>
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("account");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const handleResize = () => {
