@@ -1,124 +1,97 @@
-import React, { useState } from "react"; // Import useState here
+import React, { useState } from "react";
 import * as Components from "./Components";
-import { validateCredentials, createAccount, checkEmailExists } from "./AccountService";
+import { validateCredentials, createAccount } from "./AccountService";
 import { ToastContainer, toast } from "react-toastify";
-import { FaGooglePlusG, FaFacebook, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./Login.css";
 
 const Login = ({ termsRef }) => {
-  const [signIn, setSignIn] = useState(true); // Set up state with setSignIn as the setter
+  const [signIn, setSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const [isChecked, setIsChecked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // For debouncing
 
   const handleSignIn = async () => {
-    console.log("Sign-in button clicked");
+    if (isSubmitting) return; // Prevent multiple submissions
+    setIsSubmitting(true);
 
     if (!username || !password) {
-      console.log("Username and password are required");
       toast.error("Username and password are required.", {
+        toastId: "login-error",
         autoClose: 2000,
       });
+      setIsSubmitting(false); // Re-enable button after error
       return;
     }
 
     try {
-      console.log("Validating credentials...");
       const user = await validateCredentials(username, password);
-
       if (user) {
-        console.log("Validation successful");
-        toast.success("Sign in successful!", {
-          autoClose: 1500,
-        });
-
+        toast.success("Sign in successful!", { autoClose: 1500, toastId: "login-success" });
         localStorage.setItem("account", JSON.stringify({ user }));
+        
+        // Clear username and password to prevent re-use on revisiting
+        setUsername("");
+        setPassword("");
 
-        // Delay the redirection to allow the Toastify notification to appear
         setTimeout(() => {
-          console.log("Redirecting based on role...");
+          setIsSubmitting(false); // Reset submitting state for future logins
           switch (user.role) {
             case "manager":
-              console.log("Redirecting to /manager");
               window.location.href = "/manager";
               break;
             case "admin":
-              console.log("Redirecting to /admin");
               window.location.href = "/admin";
               break;
             case "staff":
-              console.log("Redirecting to /staff");
               window.location.href = "/staff";
               break;
-            case "admin":
-              console.log("Redirecting to /admin");
-              window.location.href = "/admin";
-              break;
             default:
-              console.log("No specific path for this role");
-              toast.error("Access denied.", {
-                autoClose: 2000,
-              });
+              toast.error("Access denied.", { autoClose: 2000, toastId: "role-error" });
               break;
           }
         }, 2000);
       } else {
-        console.log("Invalid username or password");
-        toast.error("Invalid username or password.", {
-          autoClose: 2000,
-        });
+        toast.error("Invalid username or password.", { autoClose: 2000, toastId: "invalid-credentials" });
+        setIsSubmitting(false);
       }
     } catch (error) {
-      console.log("An error occurred during sign-in:", error);
-      toast.error("An error occurred. Please try again.", {
-        autoClose: 2000,
-      });
+      toast.error("An error occurred. Please try again.", { autoClose: 2000, toastId: "sign-in-error" });
+      setIsSubmitting(false);
     }
   };
 
   const handleSignUp = async () => {
-    // Check if any input fields are empty
+    if (isSubmitting) return; // Prevent multiple submissions
+    setIsSubmitting(true);
+
     if (!username || !email || !password || !confirmPassword) {
-      toast.error("Please fill in all the inputs");
+      toast.error("Please fill in all the inputs", { toastId: "signup-input-error" });
+      setIsSubmitting(false);
       return;
     }
 
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Incorrect email format");
-      return;
-    }
-
-    // Check if password and confirmPassword match
     if (password !== confirmPassword) {
-      toast.error("Password is not the same", {
-        autoClose: 1000,
-      });
-
+      toast.error("Passwords do not match", { autoClose: 1000, toastId: "password-match-error" });
+      setIsSubmitting(false);
       return;
     }
 
-    // Check if terms of service checkbox is checked
     if (!isChecked) {
-      toast.error("You must agree to the terms of service");
+      toast.error("You must agree to the terms of service", { toastId: "terms-checkbox-error" });
+      setIsSubmitting(false);
       return;
     }
 
     try {
-      console.log("Attempting to create account in the API");
-
-      // Create account in the API
       const user = await createAccount(username, email, password);
-
       if (user) {
-        toast.success("Sign up successful");
-        // Clear form fields after successful sign-up
+        toast.success("Sign up successful", { toastId: "signup-success" });
         setUsername("");
         setEmail("");
         setPassword("");
@@ -126,15 +99,16 @@ const Login = ({ termsRef }) => {
         setIsChecked(false);
       }
     } catch (error) {
-      console.error("Error creating account:", error);
-      toast.error("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.", { toastId: "signup-error" });
     }
+    setIsSubmitting(false);
   };
 
   const handleTermsClick = (e) => {
-    e.preventDefault(); // Prevent default link behavior
-    termsRef.current.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to Terms of Service
+    e.preventDefault();
+    termsRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
   return (
     <>
       <div className="login-container">
@@ -190,23 +164,6 @@ const Login = ({ termsRef }) => {
           <Components.SignInContainer $signinIn={signIn}>
             <Components.Form>
               <Components.Title>Sign in</Components.Title>
-
-              {/* Social Media Icons Row */}
-              <Components.IconRow>
-                <Components.SocialIcon>
-                  <FaGooglePlusG />
-                </Components.SocialIcon>
-                <Components.SocialIcon>
-                  <FaFacebook />
-                </Components.SocialIcon>
-                <Components.SocialIcon>
-                  <FaGithub />
-                </Components.SocialIcon>
-                <Components.SocialIcon>
-                  <FaLinkedinIn />
-                </Components.SocialIcon>
-              </Components.IconRow>
-
               <Components.Input
                 type="text"
                 placeholder="Username"
@@ -244,7 +201,16 @@ const Login = ({ termsRef }) => {
             </Components.Overlay>
           </Components.OverlayContainer>
 
-          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            pauseOnFocusLoss={false}
+            draggable
+            pauseOnHover
+          />
         </Components.Container>
       </div>
     </>
