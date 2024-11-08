@@ -111,40 +111,40 @@
     {
       "_id": 1,
       "number": "#2457",
-      "customer": "Brandon Jacob",
-      "product": "At praesentium minu",
+      "customer": "Nguyễn Minh Hoàng",
+      "product": "Samsung Galaxy Z Flip6 5G 12GB/256GB",
       "price": 64,
       "status": "Approved"
     },
     {
       "_id": 2,
       "number": "#2147",
-      "customer": "Bridie Kessler",
-      "product": "Blanditiis dolor omnis similique",
+      "customer": "Ngô Chí Kiên",
+      "product": "Samsung Galaxy Z Flip6 5G 12GB/256GB",
       "price": 47,
       "status": "Pending"
     },
     {
       "_id": 3,
       "number": "#2049",
-      "customer": "Ashleigh Langosh",
-      "product": "At recusandae consectetur",
+      "customer": "Trần Phương Khánh",
+      "product": "Samsung Galaxy Z Flip6 5G 12GB/256GB",
       "price": 147,
       "status": "Approved"
     },
     {
       "_id": 4,
       "number": "#2644",
-      "customer": "Angus Grady",
-      "product": "Ut voluptatem id earum et",
+      "customer": "Tô Triều Vỹ",
+      "product": "Samsung Galaxy Z Flip6 5G 12GB/256GB",
       "price": 67,
       "status": "Rejected"
     },
     {
       "_id": 5,
       "number": "#3592",
-      "customer": "Raheem Lehner",
-      "product": "Sunt similique distinctio",
+      "customer": "Nguyễn Phương Nam",
+      "product": "Samsung Galaxy Z Flip6 5G 12GB/256GB",
       "price": 135,
       "status": "Approved"
     }
