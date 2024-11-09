@@ -27,6 +27,11 @@ import ProductDetail from "./pages/customer/HomePageDetail/ProductDetails.jsx";
 import CustomerApp from "./layout/CustomerApp/CustomerApp.jsx";
 import LoginPage from "./pages/login/login-page";
 import ChangePassword from "./pages/manager/change-password/index.jsx";
+import SidebarStaff from "./components/staff/sidebar/SidebarStaff.jsx";
+import StaffProfile from "./pages/staff/profile/Profile.jsx";
+import Feedback from "./pages/staff/feedback/Feedback.jsx";
+import Transaction from "./pages/staff/transaction/Transaction.jsx";
+import Dashboard from "./pages/staff/dashboard/Dashboard.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -83,6 +88,33 @@ function App() {
         {
           path: "change-password",
           element: <ChangePassword />,
+        },
+      ],
+    },
+
+    {
+      path: "/staff",
+      element: <SidebarStaff />,
+      children: [
+        {
+          path: "profile",
+          element: <StaffProfile />,
+        },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        },
+        {
+          path: "feedback",
+          element: <Feedback />,
+        },
+        {
+          path: "transaction",
+          element: <Transaction />,
+        },
+        {
+          path: "dashboard",
+          element: <Dashboard />,
         },
       ],
     },
