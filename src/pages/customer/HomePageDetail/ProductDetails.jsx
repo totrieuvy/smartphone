@@ -18,7 +18,7 @@ const ProductDetails = () => {
         console.log("Data from API:", data);
         console.log("Product ID from URL:", id);
 
-        const selectedProduct = data.find((prod) => prod.id === id); // So sánh chuỗi với chuỗi
+        const selectedProduct = data.find((prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString());
         setProduct(selectedProduct);
       } catch (err) {
         setError("Failed to fetch product details");
