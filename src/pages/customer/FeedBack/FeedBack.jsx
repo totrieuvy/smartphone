@@ -14,7 +14,7 @@ const FeedBack = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await fetch(`https://669475034bd61d8314c77f1a.mockapi.io/khanh02`);
+        const response = await fetch(`https://664f6ea2ec9b4a4a602ec579.mockapi.io/feedback`);
         const data = await response.json();
         const filteredFeedback = data.filter((feedback) => feedback.product_id === product_id); // Lọc theo product_id
         setFeedbackList(filteredFeedback);
@@ -42,7 +42,7 @@ const FeedBack = () => {
     };
 
     try {
-      const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh02", {
+      const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(feedbackData),
