@@ -32,7 +32,8 @@ import StaffProfile from "./pages/staff/profile/Profile.jsx";
 import Feedback from "./pages/staff/feedback/Feedback.jsx";
 import Transaction from "./pages/staff/transaction/Transaction.jsx";
 import Dashboard from "./pages/staff/dashboard/Dashboard.jsx";
-import FeedBackCustomer from './pages/customer/FeedBack/FeedBack.jsx/';
+import FeedBackCustomer from "./pages/customer/FeedBack/FeedBack.jsx/";
+import Detail from "./pages/staff/feedback/detailProduct/Detail.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -112,6 +113,12 @@ function App() {
         {
           path: "feedback",
           element: <Feedback />,
+          children: [
+            {
+              path: "product/:product_id", // This matches /staff/feedback/product/:productID
+              element: <Detail />, // Detail component for product details
+            },
+          ],
         },
         {
           path: "transaction",
