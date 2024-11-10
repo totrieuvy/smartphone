@@ -15,7 +15,7 @@ const ProductDetails = () => {
       try {
         const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
         const data = await response.json();
-        const selectedProduct = data.find((prod) => prod.id === parseInt(id));
+        const selectedProduct = data.find((prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString());
         setProduct(selectedProduct);
       } catch (err) {
         setError("Failed to fetch product details");
