@@ -28,19 +28,20 @@ const FeedBack = () => {
     fetchFeedback();
   }, [product_id]);
 
-  // Gửi đánh giá mới cho sản phẩm hiện tại
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
     if (!newFeedback.trim()) return;
-
+  
     const feedbackData = {
       from_id: "4",
       from_content: newFeedback,
+      reply_id: "", 
+      reply_content: "", 
       status: false,
       create_date: new Date().toISOString(),
-      product_id: product_id, // Gán product_id cho đánh giá
+      product_id: product_id, 
     };
-
+  
     try {
       const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/feedback", {
         method: "POST",
@@ -54,6 +55,7 @@ const FeedBack = () => {
       setError("Failed to submit feedback");
     }
   };
+  
 
   return (
     <div className="feedback-page">
