@@ -1,9 +1,96 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
+import "./FeedBack.css";
 
 const FeedBack = () => {
-  return (
-    <div className="titles">FeedBack</div>
-  )
-}
+  const { product_id } = useParams(); // Lấy product_id từ URL
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [newFeedback, setNewFeedback] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export default FeedBack
+  // Lấy dữ liệu đánh giá cho sản phẩm cụ thể
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const response = await fetch(`https://669475034bd61d8314c77f1a.mockapi.io/khanh02`);
+        const data = await response.json();
+        const filteredFeedback = data.filter((feedback) => feedback.product_id === product_id); // Lọc theo product_id
+        setFeedbackList(filteredFeedback);
+      } catch (err) {
+        setError("Failed to fetch feedback");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, [product_id]);
+
+  // Gửi đánh giá mới cho sản phẩm hiện tại
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+    if (!newFeedback.trim()) return;
+
+    const feedbackData = {
+      from_id: "4",
+      from_content: newFeedback,
+      status: false,
+      create_date: new Date().toISOString(),
+      product_id: product_id, // Gán product_id cho đánh giá
+    };
+
+    try {
+      const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh02", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(feedbackData),
+      });
+      const newEntry = await response.json();
+      setFeedbackList((prev) => [newEntry, ...prev]);
+      setNewFeedback("");
+    } catch (err) {
+      setError("Failed to submit feedback");
+    }
+  };
+
+  return (
+    <div className="feedback-page">
+      <h2>Feedback for Product {product_id}</h2>
+      <Form onSubmit={handleFeedbackSubmit}>
+        <Form.Group controlId="feedbackText">
+          <Form.Label>Leave your feedback</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={newFeedback}
+            onChange={(e) => setNewFeedback(e.target.value)}
+            placeholder="Write your feedback here..."
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" className="mt-3">
+          Submit Feedback
+        </Button>
+      </Form>
+
+      {loading ? (
+        <p>Loading feedback...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <div className="feedback-list">
+          {feedbackList.map((feedback) => (
+            <div key={feedback.id} className="feedback-item">
+              <p><strong>From:</strong> {feedback.from_id}</p>
+              <p><strong>Feedback:</strong> {feedback.from_content}</p>
+              <p><strong>Date:</strong> {new Date(feedback.create_date).toLocaleDateString()}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FeedBack;

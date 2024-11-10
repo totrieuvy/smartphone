@@ -1,11 +1,13 @@
+// ProductDetails.js
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import "./ProductDetail.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,9 +17,6 @@ const ProductDetails = () => {
       try {
         const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
         const data = await response.json();
-        console.log("Data from API:", data);
-        console.log("Product ID from URL:", id);
-
         const selectedProduct = data.find((prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString());
         setProduct(selectedProduct);
       } catch (err) {
@@ -30,8 +29,8 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  const handleFeedbackClick = () => {
+    navigate(`/feedbacks/${product.id}`);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -51,7 +50,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="specifications-container">
+           <div className="specifications-container">
         <div className="specifications-column">
           <h1 className="title">Thông số nổi bật</h1>
           {product.screen_size && (
@@ -165,7 +164,7 @@ const ProductDetails = () => {
         <Button variant="secondary" className="buy-install">
           Mua trả góp
         </Button>
-        <Button variant="success" className="feedback">
+        <Button variant="success" className="feedback" onClick={handleFeedbackClick}>
           Đánh giá
         </Button>
       </div>

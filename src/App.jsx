@@ -32,6 +32,7 @@ import StaffProfile from "./pages/staff/profile/Profile.jsx";
 import Feedback from "./pages/staff/feedback/Feedback.jsx";
 import Transaction from "./pages/staff/transaction/Transaction.jsx";
 import Dashboard from "./pages/staff/dashboard/Dashboard.jsx";
+import FeedBackCustomer from './pages/customer/FeedBack/FeedBack.jsx/';
 function App() {
   const router = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ function App() {
         {
           path: "product/:id",
           element: <ProductDetail />,
+        },
+        {
+          path: "/feedbacks/:product_id",
+          element: <FeedBackCustomer />,
         },
       ],
     },
