@@ -51,7 +51,7 @@ const HomePage = () => {
       const fetchProducts = async () => {
         setLoadingProducts(true);
         try {
-          const productResponse = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/product");
+          const productResponse = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
           const productsData = await productResponse.json();
           const categoryProducts = productsData.filter((product) => product.category === paramCategory);
           setProducts(categoryProducts);
