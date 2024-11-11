@@ -34,6 +34,8 @@ import Transaction from "./pages/staff/transaction/Transaction.jsx";
 import Dashboard from "./pages/staff/dashboard/Dashboard.jsx";
 import FeedBackCustomer from "./pages/customer/FeedBack/FeedBack.jsx/";
 import Detail from "./pages/staff/feedback/detailProduct/Detail.jsx";
+import AccountCustomer from "./pages/customer/AccountCustomer/AccountCustomer.jsx";
+import ChangePasswordCustomer from "./pages/customer/AccountCustomer/change-password/ChangePassword.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -55,6 +57,14 @@ function App() {
         {
           path: "/feedbacks/:product_id",
           element: <FeedBackCustomer />,
+        },
+        {
+          path: "customer/profile",
+          element: <AccountCustomer />,
+        },
+        {
+          path: "customer/change-password",
+          element: <ChangePasswordCustomer />,
         },
       ],
     },

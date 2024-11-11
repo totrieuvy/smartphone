@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import * as Components from "./Components";
 import { validateCredentials, createAccount } from "./AccountService";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";  // Import SweetAlert2
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./Login.css";
@@ -14,33 +13,38 @@ const Login = ({ termsRef }) => {
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // For debouncing
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSignIn = async () => {
-    if (isSubmitting) return; // Prevent multiple submissions
+    if (isSubmitting) return;
     setIsSubmitting(true);
 
     if (!username || !password) {
-      toast.error("Username and password are required.", {
-        toastId: "login-error",
-        autoClose: 2000,
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Username and password are required.",
+        timer: 2000,
       });
-      setIsSubmitting(false); // Re-enable button after error
+      setIsSubmitting(false);
       return;
     }
 
     try {
       const user = await validateCredentials(username, password);
       if (user) {
-        toast.success("Sign in successful!", { autoClose: 1500, toastId: "login-success" });
+        Swal.fire({
+          icon: "success",
+          title: "Sign in successful!",
+          timer: 1500,
+        });
         localStorage.setItem("account", JSON.stringify({ user }));
-        
-        // Clear username and password to prevent re-use on revisiting
+
         setUsername("");
         setPassword("");
 
         setTimeout(() => {
-          setIsSubmitting(false); // Reset submitting state for future logins
+          setIsSubmitting(false);
           switch (user.role) {
             case "manager":
               window.location.href = "/manager";
@@ -51,47 +55,97 @@ const Login = ({ termsRef }) => {
             case "staff":
               window.location.href = "/staff";
               break;
+            case "customer":
+              window.location.href = "/";
+              break;
             default:
-              toast.error("Access denied.", { autoClose: 2000, toastId: "role-error" });
+              Swal.fire({
+                icon: "error",
+                title: "Access Denied",
+                text: "You don't have permission to access this page.",
+                timer: 2000,
+              });
               break;
           }
         }, 2000);
       } else {
-        toast.error("Invalid username or password.", { autoClose: 2000, toastId: "invalid-credentials" });
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Credentials",
+          text: "Invalid username or password.",
+          timer: 2000,
+        });
         setIsSubmitting(false);
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.", { autoClose: 2000, toastId: "sign-in-error" });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred. Please try again.",
+        timer: 2000,
+      });
       setIsSubmitting(false);
     }
   };
-
+  
   const handleSignUp = async () => {
-    if (isSubmitting) return; // Prevent multiple submissions
+    if (isSubmitting) return;
     setIsSubmitting(true);
-
+  
+    // Check if all fields are filled out
     if (!username || !email || !password || !confirmPassword) {
-      toast.error("Please fill in all the inputs", { toastId: "signup-input-error" });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please fill in all the inputs.",
+      });
       setIsSubmitting(false);
       return;
     }
-
+  
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Email",
+        text: "Please enter a valid email address.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+  
+    // Check if passwords match
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match", { autoClose: 1000, toastId: "password-match-error" });
+      Swal.fire({
+        icon: "error",
+        title: "Password Mismatch",
+        text: "Passwords do not match.",
+        timer: 1000,
+      });
       setIsSubmitting(false);
       return;
     }
-
+  
+    // Check if the terms are agreed to
     if (!isChecked) {
-      toast.error("You must agree to the terms of service", { toastId: "terms-checkbox-error" });
+      Swal.fire({
+        icon: "error",
+        title: "Agreement Error",
+        text: "You must agree to the terms of service.",
+      });
       setIsSubmitting(false);
       return;
     }
-
+  
     try {
       const user = await createAccount(username, email, password);
       if (user) {
-        toast.success("Sign up successful", { toastId: "signup-success" });
+        Swal.fire({
+          icon: "success",
+          title: "Sign Up Successful",
+          timer: 1500,
+        });
         setUsername("");
         setEmail("");
         setPassword("");
@@ -99,10 +153,15 @@ const Login = ({ termsRef }) => {
         setIsChecked(false);
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.", { toastId: "signup-error" });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred. Please try again.",
+      });
     }
     setIsSubmitting(false);
   };
+  
 
   const handleTermsClick = (e) => {
     e.preventDefault();
@@ -200,17 +259,6 @@ const Login = ({ termsRef }) => {
               </Components.RightOverlayPanel>
             </Components.Overlay>
           </Components.OverlayContainer>
-
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={true}
-            closeOnClick
-            pauseOnFocusLoss={false}
-            draggable
-            pauseOnHover
-          />
         </Components.Container>
       </div>
     </>

@@ -38,11 +38,6 @@ export const checkEmailExists = async (email) => {
 // Function to create a new user account
 export const createAccount = async (username, email, password) => {
   try {
-    // Check if email exists before creating account
-    // const emailExists = await checkEmailExists(email);
-    // if (emailExists) {
-    //     return { error: "Email already exists" }; // Indicate email already exists
-    // }
 
     const response = await axios.post(API_URL, {
       username,
