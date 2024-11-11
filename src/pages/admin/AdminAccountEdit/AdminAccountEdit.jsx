@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './AdminAccountEdit.css';
+import { useNavigate } from 'react-router-dom';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 
 const AdminAccountEdit = () => {
@@ -12,6 +13,7 @@ const AdminAccountEdit = () => {
         password: '',
     });
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account/1')
@@ -35,6 +37,10 @@ const AdminAccountEdit = () => {
 
     const togglePasswordVisibility = () => {
         setShowPassword(prevShowPassword => !prevShowPassword);
+    };
+
+    const handleCancel = () => {
+        navigate('/admin/adminaccount'); // Adjust the path to your actual account page route
     };
 
     const handleSaveChanges = () => {
@@ -109,7 +115,10 @@ const AdminAccountEdit = () => {
                     </div>
                 </div>
                 <div className="button-container">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleSaveChanges}>
+                    <button type="button" className="btn btn-secondary mt-3" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                    <button type="button" className="btn btn-primary mt-3 ms-2" onClick={handleSaveChanges}>
                         Save Changes
                     </button>
                 </div>
