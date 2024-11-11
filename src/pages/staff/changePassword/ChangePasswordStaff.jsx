@@ -32,8 +32,7 @@ function ChangePasswordStaff() {
         });
         form.resetFields();
         localStorage.removeItem("account");
-        setTimeout(() => navigate("login"), 1000);
-        toast.success("Change password successfully. Please login again");
+        setTimeout(() => navigate("/login"), 1000);
       }
     } catch (error) {
       console.log(error);

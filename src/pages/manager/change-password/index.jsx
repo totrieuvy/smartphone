@@ -23,28 +23,29 @@ function ChangePassword() {
   const handleFinish = async (values) => {
     try {
       if (values.newPassword !== values.confirmNewPassword) {
-        toast.error("Confirm passsword incorrect!");
+        toast.error("Confirm password incorrect!");
       } else if (values.oldPassword !== oldPassword) {
-        toast.error("Old passsword incorrect!");
+        toast.error("Old password incorrect!");
       } else {
         await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
           password: values.newPassword,
         });
         form.resetFields();
         localStorage.removeItem("account");
+
         setTimeout(() => navigate("/login"), 1000);
-        toast.success("Change password successfully. Please login again");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
-    <div className="ChangePassword">
-      <div className="ChangePassword__title">
+    <div className="ChangePasswordStaff">
+      <div className="ChangePasswordStaff__title">
         <h2>Change password</h2>
       </div>
-      <div className="ChangePassword__content">
+      <div className="ChangePasswordStaff__content">
         <Form form={form} labelCol={{ span: 24 }} onFinish={handleFinish}>
           <Form.Item
             name="oldPassword"
@@ -52,7 +53,7 @@ function ChangePassword() {
             rules={[
               {
                 required: true,
-                message: "Old password cannot null!!!",
+                message: "Old password cannot be null!",
               },
             ]}
           >
@@ -64,7 +65,7 @@ function ChangePassword() {
             rules={[
               {
                 required: true,
-                message: "New password cannot null!!!",
+                message: "New password cannot be null!",
               },
             ]}
           >
@@ -76,15 +77,15 @@ function ChangePassword() {
             rules={[
               {
                 required: true,
-                message: "Confirm password cannot null!!!",
+                message: "Confirm password cannot be null!",
               },
             ]}
           >
             <Input.Password placeholder="Enter confirm password" />
           </Form.Item>
           <Form.Item>
-            <div className="ChangePassword__buttonWrapper">
-              <Button type="primary" className="ChangePassword__buttonWrapper" htmlType="submit">
+            <div className="ChangePasswordStaff__buttonWrapper">
+              <Button type="primary" className="ChangePasswordStaff__buttonWrapper" htmlType="submit">
                 Change
               </Button>
             </div>
