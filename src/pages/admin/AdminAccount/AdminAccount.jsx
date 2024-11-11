@@ -3,6 +3,8 @@ import axios from 'axios';
 import './AdminAccount.css';
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 
 const AdminAccount = () => {
   const [formData, setFormData] = useState({
@@ -10,27 +12,44 @@ const AdminAccount = () => {
     email: '',
     role: 'Admin', // Setting default role as Admin
     phone: '',
-    createDate: '',
+    create_date: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch admin data on component mount
   useEffect(() => {
-    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account/1') // Assuming admin ID is 1
+    axios.get('https://6692a166346eeafcf46da14d.mockapi.io/account/1')
       .then(response => {
+        let rawDate = response.data.create_date;
+        let formattedDate = rawDate;
+  
+        // Check if the date is in "yyyy-dd-MM" format
+        if (/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+          const [year, day, month] = rawDate.split("-");
+          formattedDate = `${year}-${month}-${day}`;
+        }
+  
+        // If it's already in the correct "yyyy-MM-dd" format, leave it unchanged
         setFormData(prevData => ({
           ...prevData,
-          ...response.data // Merge existing defaults with fetched data
+          ...response.data,
+          create_date: formattedDate // Update with the corrected date format
         }));
       })
       .catch(error => {
         console.error("There was an error fetching the admin data!", error);
       });
   }, []);
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(prevShowPassword => !prevShowPassword);
+  };
+
+  const handleEditClick = () => {
+    navigate('/admin/accountedit'); // Navigate to the edit page
   };
 
   return (
@@ -104,17 +123,22 @@ const AdminAccount = () => {
               </span>
             </div>
             <div className="mb-3">
-              <label htmlFor="createDate" className="form-label">Create Date</label>
+              <label htmlFor="create_date" className="form-label">Create Date</label>
               <input
                 type="date"
                 className="form-control"
-                id="createDate"
-                name="createDate"
-                value={formData.createDate || ''}
+                id="create_date"
+                name="create_date"
+                value={formData.create_date || ''}
                 readOnly
               />
             </div>
           </div>
+        </div>
+        <div className="button-container">
+          <button type="button" className="btn btn-primary mt-3" onClick={handleEditClick}>
+            Change Info
+          </button>
         </div>
       </form>
     </main>

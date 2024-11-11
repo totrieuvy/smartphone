@@ -31,7 +31,7 @@ const UserList = () => {
   };
 
   const filteredUsers = users
-    .filter(user => user.role === 'user')
+    .filter(user => user.role === 'customer')
     .filter(user =>
       user.name?.toLowerCase().includes(search.toLowerCase()) ||
       user.role?.toLowerCase().includes(search.toLowerCase())

@@ -34,6 +34,7 @@ import Transaction from "./pages/staff/transaction/Transaction.jsx";
 import Dashboard from "./pages/staff/dashboard/Dashboard.jsx";
 import FeedBackCustomer from "./pages/customer/FeedBack/FeedBack.jsx/";
 import Detail from "./pages/staff/feedback/detailProduct/Detail.jsx";
+import AdminAccountEdit from "./pages/admin/AdminAccountEdit/AdminAccountEdit.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -161,6 +162,10 @@ function App() {
         {
           path: "adminaccount",
           element: <AdminAccount />,
+        },
+        {
+          path: "accountedit",
+          element: <AdminAccountEdit />,
         },
       ],
     },

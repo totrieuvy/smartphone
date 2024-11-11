@@ -15,22 +15,34 @@ const StaffEditForm = () => {
     salary: '',
     phone: '',
     password: '',
-    createDate: '',
+    create_date: '',
   });
 
   // Fetch staff data on component mount
   useEffect(() => {
     axios.get(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`)
       .then(response => {
+        const fetchedData = response.data;
+  
+        // Format the create_date if it is in "yyyy-dd-MM" format
+        let formattedDate = fetchedData.create_date;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
+          const [year, day, month] = formattedDate.split("-");
+          formattedDate = `${year}-${month}-${day}`;
+        }
+  
+        // Update the form data with the formatted date
         setFormData(prevData => ({
           ...prevData,
-          ...response.data // Merge existing defaults with fetched data
+          ...fetchedData,
+          create_date: formattedDate
         }));
       })
       .catch(error => {
         console.error("There was an error fetching the staff data!", error);
       });
   }, [userId]);
+  
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -149,13 +161,13 @@ const StaffEditForm = () => {
               </span>
             </div>
             <div className="mb-3">
-              <label htmlFor="createDate" className="form-label">Create Date</label>
+              <label htmlFor="create_date" className="form-label">Create Date</label>
               <input
                 type="date"
                 className="form-control"
-                id="createDate"
-                name="createDate"
-                value={formData.createDate || ''} // Ensure controlled input
+                id="create_date"
+                name="create_date"
+                value={formData.create_date || ''} // Ensure controlled input
                 onChange={handleChange}
                 required
               />

@@ -62,7 +62,7 @@ const AdminSidebar = () => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="/login">
                 <i className='bi bi-box-arrow-right'></i>
                 <span>Logout</span>
               </a>
