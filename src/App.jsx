@@ -37,6 +37,11 @@ import Detail from "./pages/staff/feedback/detailProduct/Detail.jsx";
 import AdminAccountEdit from "./pages/admin/AdminAccountEdit/AdminAccountEdit.jsx";
 import AccountCustomer from "./pages/customer/AccountCustomer/AccountCustomer.jsx";
 import ChangePasswordCustomer from "./pages/customer/AccountCustomer/change-password/ChangePassword.jsx";
+
+import ShoppingPage from "./pages/customer/ShoppingPage/ShoppingPage.jsx";
+import ShoppingPageAProduct from "./pages/customer/ShoppingPageAProduct/ShoppingPageAProduct.jsx";
+import ShoppingPageMini from "./pages/customer/ShoppingPageMini/ShoppingPageMini.jsx";
+import ProductDetailCustomer from "./pages/customer/ProductDetailCustomer/ProductDetailCustomer.jsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -66,6 +71,22 @@ function App() {
         {
           path: "customer/change-password",
           element: <ChangePasswordCustomer />,
+        },
+        {
+          path: "shoppingPage",
+          element: <ShoppingPage />,
+        },
+        {
+          path: "shoppingPageAProduct",
+          element: <ShoppingPageAProduct />,
+        },
+        {
+          path: "productDetailCustomer",
+          element: <ProductDetailCustomer />,
+        },
+        {
+          path: "shoppingPageMini",
+          element: <ShoppingPageMini />,
         },
       ],
     },

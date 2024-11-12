@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
+import { toast } from "react-toastify";
 import "./ProductDetail.css";
 
 const ProductDetails = () => {
@@ -36,6 +37,47 @@ const ProductDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (!product) return <p>Product not found</p>;
+
+
+  const addToCart = async () => {
+    if (product) {
+      if (product.stock > 0) {
+        try {
+          const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/cart", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...product,
+              quantity: 1, // Set quantity to 1 when adding to cart
+            }),
+          });
+          if (response.ok) {
+            toast.success("Product added to cart successfully!");
+          } else {
+            toast.error("Failed to add product to cart.");
+          }
+        } catch (error) {
+          toast.error("Error adding product to cart");
+        }
+      } else {
+        toast.warn("This product is out of stock!");
+      }
+    }
+  };
+
+  const handleBuyClick = () => {
+    if (product) {
+      navigate('/shoppingPage', { state: { product } });
+      console.log("check",product);
+    }
+  };
+  const handleBuyInstallClick = () => {
+    if (product) {
+      navigate('/shoppingPageAProduct', { state: { product } });
+    }
+  };
 
   return (
     <div>
@@ -155,16 +197,16 @@ const ProductDetails = () => {
       </div>
 
       <div className="button-link" style={{ display: "flex", gap: "10px" }}>
-        <Button variant="outline-primary" className="icon-cart">
+      <Button variant="outline-primary" className="icon-cart" onClick={addToCart}>
           <FaShoppingCart />
         </Button>
-        <Button variant="primary" className="buy">
+        <Button variant="primary" className="buy" onClick={handleBuyClick}>
           Mua ngay
         </Button>
-        <Button variant="secondary" className="buy-install">
+        <Button variant="secondary" className="buy-install" onClick={handleBuyInstallClick}>
           Mua trả góp
         </Button>
-        <Button variant="success" className="feedback" onClick={handleFeedbackClick}>
+        <Button variant="success" className="feedback">
           Đánh giá
         </Button>
       </div>

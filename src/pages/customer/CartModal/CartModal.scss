@@ -1,0 +1,398 @@
+
+// Modal backdrop styles
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Black background with 50% opacity
+  backdrop-filter: blur(4px); // Blur effect for content behind
+  z-index: 1000; // Ensure backdrop is on top of other elements
+  animation: fadeIn 0.3s ease; // Fade in animation
+}
+
+// Cart modal styles
+.cart {
+  position: fixed;
+  top: 50%;
+  left: 86%;
+  transform: translate(-50%, -50%);
+  max-width: 30%;
+  width: 70%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 1%;
+  z-index: 1001; // Ensure modal is above backdrop
+  animation: slideIn 0.3s ease; // Slide in animation
+
+  // Add scrollbar styles
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+
+    .total-amount {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translate(-50%, -60%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+.cart__items {
+  max-height: 70%;
+  overflow-y: auto; /* This will add a vertical scrollbar when content exceeds 600px */
+
+.cart-item {
+  background: white;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &__content {
+    display: flex;
+    gap: 20px;
+  }
+
+  .cart-item__image {
+    width: 30%;
+    height: 100%;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #000;
+  }
+}
+}
+
+.cart-item__content {
+  display: flex;
+  justify-content: space-between; /* Make sure the content spans across the available space */
+  align-items: center; /* Vertically center the content */
+  padding: 10px;
+}
+
+.cart-item__top {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%;
+}
+
+.cart-item__price {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+}
+
+.cart-item__specs {
+  color: #666;
+  margin: 5px 0;
+}
+
+.cart-item__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+// Quantity control styles
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .quantity-btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid #d1bebe;
+    background: rgb(195, 200, 224);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+
+  .quantity-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-size: 16px;
+  }
+}
+
+// Select device styles
+.select-device {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: fit-content;
+
+  span {
+    font-size: 14px;
+    color: #333;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  &:hover input[type="checkbox"] {
+    border-color: #007bff;
+  }
+}
+
+// Payment button styles
+.payment-btn {
+  background: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
+// Select all cart items
+
+.cart__select-all label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cart__select-all input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.cart__select-all span {
+  color: #000;
+}
+
+.cart__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background-color: #1a1a2e;
+  margin: 10px;
+  margin-right: 30px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+// Header styles
+.cart__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 0%;
+}
+
+.cart__title {
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 auto;
+}
+
+// Responsive media queries
+@media (max-width: 1200px) {
+  .cart {
+    left: 50%;
+    width: 80%;
+    max-width: 90%;
+  }
+
+  .cart__header {
+    padding: 8px;
+  }
+
+  .cart__title {
+    font-size: 32px;
+  }
+
+  .cart-item__image {
+    width: 40%;
+  }
+
+  .cart-item__title {
+    font-size: 16px;
+  }
+
+  .cart-item__price {
+    font-size: 18px;
+  }
+
+  .cart__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart {
+    left: 50%;
+    width: 90%;
+    max-width: 95%;
+  }
+
+  .cart__header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart__title {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .cart-item__image {
+    width: 50%;
+  }
+
+  .cart-item__title {
+    font-size: 14px;
+  }
+
+  .cart-item__price {
+    font-size: 16px;
+  }
+
+  .cart__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quantity-control {
+    flex-direction: column;
+  }
+
+  .payment-btn {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart {
+    width: 100%;
+    max-width: 100%;
+    top: 50%;
+  }
+
+  .cart__header {
+    padding: 6px;
+  }
+
+  .cart__title {
+    font-size: 24px;
+  }
+
+  .cart-item__image {
+    width: 60%;
+  }
+
+  .cart-item__title {
+    font-size: 12px;
+  }
+
+  .cart-item__price {
+    font-size: 14px;
+  }
+
+  .payment-btn {
+    padding: 8px 15px;
+  }
+
+  .cart__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quantity-control {
+    flex-direction: column;
+  }
+}
