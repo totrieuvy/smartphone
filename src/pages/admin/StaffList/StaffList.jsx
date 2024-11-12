@@ -170,62 +170,66 @@ const UserList = () => {
           <InputGroup.Text>{`Showing ${filteredUsers.length} staff(s)`}</InputGroup.Text>
         </InputGroup>
 
-        <table className='table table-borderless datatable'>
-          <thead className='table-light'>
-            <tr>
-              <th scope='col'>ID</th>
-              <th scope='col'>Name</th>
-              <th scope='col'>Phone</th>
-              <th scope='col'>Email</th>
-              <th scope='col'>Role</th>
-              <th scope='col'>Status</th>
-              <th scope='col'>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.map((user) => (
-              <tr key={user.id}>
-                <th scope='row'>
-                  <a href="#" className="custom-link">{user.id}</a>
-                </th>
-                <td>{user.username}</td>
-                <td>{user.phone}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>             
-                <td>
-                  <span className={`badge bg-${handleStatus(user.status)}`}>
-                    {user.status ? 'Active' : 'Banned'}
-                  </span>
-                </td>
-                <td className="d-flex align-items-center">
-                  <FaEye
-                    className="custom-icon me-3 text-dark"
-                    onClick={() => handleShowModal(user)}
-                    style={{ cursor: 'pointer' }}
-                    title="View Detail"
-                  />
-                  <FaEdit
-                    className="custom-icon me-2 text-dark"
-                    onClick={() => handleEditClick(user.id)}
-                    style={{ cursor: 'pointer' }}
-                    title="Edit"
-                  />
-                  <Dropdown align="end">
-                    <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
-                      &#8942;
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => handleShowBanUnbanModal(user)}>
-                        {user.status ? 'Ban' : 'Unban'}
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleShowDeleteModal(user)} className="text-danger">Delete</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </td>
+
+        <div className="table-responsive">
+          <table className='table table-borderless datatable'>
+            <thead className='table-light'>
+              <tr>
+                <th scope='col'>ID</th>
+                <th scope='col'>Name</th>
+                <th scope='col'>Phone</th>
+                <th scope='col'>Email</th>
+                <th scope='col'>Role</th>
+                <th scope='col'>Status</th>
+                <th scope='col'>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentUsers.map((user) => (
+                <tr key={user.id}>
+                  <th scope='row'>
+                    <a href="#" className="custom-link">{user.id}</a>
+                  </th>
+                  <td>{user.username}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <span className={`badge bg-${handleStatus(user.status)}`}>
+                      {user.status ? 'Active' : 'Banned'}
+                    </span>
+                  </td>
+                  <td className="d-flex align-items-center">
+                    <FaEye
+                      className="custom-icon me-3 text-dark"
+                      onClick={() => handleShowModal(user)}
+                      style={{ cursor: 'pointer' }}
+                      title="View Detail"
+                    />
+                    <FaEdit
+                      className="custom-icon me-2 text-dark"
+                      onClick={() => handleEditClick(user.id)}
+                      style={{ cursor: 'pointer' }}
+                      title="Edit"
+                    />
+                    <Dropdown align="end">
+                      <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
+                        &#8942;
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleShowBanUnbanModal(user)}>
+                          {user.status ? 'Ban' : 'Unban'}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShowDeleteModal(user)} className="text-danger">Delete</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
 
         <Pagination className="justify-content-center">
           {[...Array(totalPages)].map((_, index) => (
