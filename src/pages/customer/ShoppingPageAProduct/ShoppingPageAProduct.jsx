@@ -55,6 +55,9 @@ const ShoppingPageAProduct = () => {
     const [selectedProvince, setSelectedProvince] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [selectedWard, setSelectedWard] = useState('');
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [notes, setNotes] = useState('');
 
     const bonusItems = [
         'Kèm sạc, cáp sạc nhanh 33/ 67/ 120/ 160w (tùy mẫu), tai nghe AKG, ốp lưng (tùy mã), dán bảo vệ lưng, cáp lấy sim',
@@ -66,7 +69,6 @@ const ShoppingPageAProduct = () => {
 
     const warrantyItems = [
         'Bao test 15 ngày 1 đổi 1, đổi màu và đổi dung lượng miễn phí (đối dòng khác khấu trừ 10-15% trong 7 ngày đầu)',
-        'Bảo hành tiêu chuẩn 6 tháng tại Dế Mobile',
         'Bảo hành thay pin miễn phí (khi pin chai/ hư trong thời gian còn hạn bảo hành)',
         'Bảo hành phụ kiện miễn phí (trọn đời - không giới hạn thời gian)'
     ];
@@ -246,6 +248,9 @@ const ShoppingPageAProduct = () => {
                                     <li>✅ Không chứng minh thu nhập</li>
                                     <li>✅ Tuổi từ 18 trở lên (có hỗ trợ sinh viên)</li>
                                     <li>✅ Thời gian duyệt: 15 phút lấy máy ngay</li>
+                                    <li>✅ Nhiều chương trình khuyến mãi</li>
+                                    <li>✅ Không yêu cầu cung cấp thẻ tín dụng</li>
+                                    <li>✅ Tất cả giấy tờ ở trên đều phải là giấy tờ gốc</li>
                                 </ul>
                                 <div className="payment-options">
                                     <label>Chọn số tiền trả trước:</label>
@@ -271,11 +276,21 @@ const ShoppingPageAProduct = () => {
                         <div className="information-step">
                             <div className="form-group1">
                                 <label>Name</label>
-                                <input type="text" placeholder="Enter name" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
                             </div>
                             <div className="form-group1">
                                 <label>Number Phone</label>
-                                <input type="text" placeholder="Enter phone number" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter phone number"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                />
                             </div>
                             <div className="address-group">
                                 <div className="form-group">
@@ -327,7 +342,11 @@ const ShoppingPageAProduct = () => {
                             </div>
                             <div className="form-group1">
                                 <label>Notes (House number/Specific address)</label>
-                                <textarea placeholder="Enter your detailed address"></textarea>
+                                <textarea
+                                    placeholder="Enter your detailed address"
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                ></textarea>
                             </div>
                             <div className="buttons">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
@@ -381,10 +400,22 @@ const ShoppingPageAProduct = () => {
                             <div className="total-amount3">
                                 <h3>Total: {formatPrice(paymentAmount)}</h3>
                             </div>
-                            <div className="checkout-footer">
+                            <div className="checkout-footer2">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
                                 { }
-                                <CheckoutButton label="Checkout" />
+                                <CheckoutButton
+                                    label="Checkout"
+                                    data={{
+                                        cartItems, downPayment, userInfo: {
+                                            name,
+                                            phoneNumber,
+                                            selectedProvince,
+                                            selectedDistrict,
+                                            selectedWard,
+                                            notes
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                     )}

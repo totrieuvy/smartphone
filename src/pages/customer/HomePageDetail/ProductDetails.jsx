@@ -44,16 +44,25 @@ const ProductDetails = () => {
     if (product) {
       if (product.stock > 0) {
         try {
+          console.log("Product to add to cart:", {
+            ...product,
+            quantity: 1, // Set quantity to 1 when adding to cart
+          });
+
+          // Make the POST request to add the product to the cart
           const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/cart", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              product_id: product.id,  // Use the product id from the client
               ...product,
-              quantity: 1, // Set quantity to 1 when adding to cart
+              quantity: 1, // Set quantity to 1
             }),
           });
+
+          // Check if the request was successful
           if (response.ok) {
             toast.success("Product added to cart successfully!");
           } else {

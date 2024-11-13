@@ -10,9 +10,10 @@ import CheckoutButton from '../../../components/componentCustomer/CheckoutButton
 
 const ShoppingPageMini = () => {
     const location = useLocation();
-    const { selectedProducts } = location.state || {};  // Lấy dữ liệu từ state
+    const { selectedProducts } = location.state || {};
+    const { cart } = location.state || { cart: [] };
 
-    const [cartItems, setCartItems] = useState([]);
+    const [CartItems, setCartItems] = useState([]);
 
     useEffect(() => {
         if (selectedProducts) {
@@ -20,7 +21,6 @@ const ShoppingPageMini = () => {
         }
     }, [selectedProducts]);
 
-    // Kiểm tra xem dữ liệu đã được truyền hay chưa
     useEffect(() => {
         if (selectedProducts) {
             console.log("Received selected products:", selectedProducts);
@@ -40,6 +40,11 @@ const ShoppingPageMini = () => {
     const [selectedProvince, setSelectedProvince] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [selectedWard, setSelectedWard] = useState('');
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [notes, setNotes] = useState('');
+
+
 
 
 
@@ -52,20 +57,8 @@ const ShoppingPageMini = () => {
         },
         {
             id: 2,
-            name: 'Đặc quyền 12 tháng 1 đổi 1',
-            price: 39.99,
-            originalPrice: 89.99
-        },
-        {
-            id: 3,
             name: 'Dịch vụ F.Studio Premium Care',
             price: 59.99,
-            originalPrice: null
-        },
-        {
-            id: 4,
-            name: 'BHV (Bảo hành lần 3 đổi máy mới)',
-            price: 70.99,
             originalPrice: null
         }
     ];
@@ -80,19 +73,12 @@ const ShoppingPageMini = () => {
     };
 
 
-    const bonusItems = [
-        'Kèm sạc, cáp sạc nhanh 33/ 67/ 120/ 160w (tùy mẫu), tai nghe AKG, ốp lưng (tùy mã), dán bảo vệ lưng, cáp lấy sim',
-        'Tặng Voucher giảm giá lên đến 450.000 đ khi mua điện thoại, máy tính bảng, laptop',
-        'Tặng Voucher giảm 30% khi mua phụ kiện',
-        'Tặng gói "bảo hành phụ kiện" (trọn đời)',
-        'Miễn phí giao hàng toàn quốc'
-    ];
-
     const warrantyItems = [
         'Bao test 15 ngày 1 đổi 1, đổi màu và đổi dung lượng miễn phí (đối dòng khác khấu trừ 10-15% trong 7 ngày đầu)',
-        'Bảo hành tiêu chuẩn 6 tháng tại Dế Mobile',
+        'Bảo hành tiêu chuẩn 6 tháng tại Amazing-FPT Shop',
         'Bảo hành thay pin miễn phí (khi pin chai/ hư trong thời gian còn hạn bảo hành)',
-        'Bảo hành phụ kiện miễn phí (trọn đời - không giới hạn thời gian)'
+        'Bảo hành phụ kiện miễn phí (trọn đời - không giới hạn thời gian)',
+        'Bảo hành các phần mềm cài đặt sẵn, bao gồm sửa lỗi, cập nhật hoặckhôi phục.'
     ];
 
     // Fetch provinces on component mount
@@ -192,7 +178,9 @@ const ShoppingPageMini = () => {
         navigate('/category/1');
     };
     const handleWarrantyClick = (id) => {
-        setSelectedWarranty(currentSelected => currentSelected === id ? null : id);
+        const selectedWarranty = warrantyOptions.find(option => option.id === id);
+        if (!selectedWarranty) return;
+        setSelectedWarranty(selectedWarranty);
     };
 
     return (
@@ -207,8 +195,8 @@ const ShoppingPageMini = () => {
 
 
                 <div className="cart-item-container1">
-                    {cartItems?.length > 0 ? (
-                        cartItems.map(item => (
+                    {CartItems?.length > 0 ? (
+                        CartItems.map(item => (
                             <div key={item.id} className="cart-item1">
                                 <img
                                     src={item.img}
@@ -253,23 +241,8 @@ const ShoppingPageMini = () => {
                 </div>
 
                 <div className="bonus-package1">
-                    <div className="bonus-section1">
-                        <h2 className="section-title1">
-                            <Gift className="gift-icon" size={20} />
-                            Bộ phụ kiện tặng kèm
-                        </h2>
-                        <ul className="bonus-list">
-                            {bonusItems.map((item, index) => (
-                                <li key={index} className="bonus-item">
-                                    <Gift className="item-icon" size={16} />
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
                     <div className="warranty-section1">
-                        <h2 className="section-title1">Chế độ bảo hành theo mẫu</h2>
+                        <h2 className="section-title1">Chế độ bảo hành</h2>
                         <ul className="warranty-list">
                             {warrantyItems.map((item, index) => (
                                 <li key={index} className="warranty-item">
@@ -311,7 +284,7 @@ const ShoppingPageMini = () => {
                         <div className="bill-step1">
                             <div className="bill-items">
                                 {/* Lặp qua các sản phẩm trong giỏ hàng */}
-                                {cartItems.map((item) => (
+                                {CartItems.map((item) => (
                                     <div key={item.id} className="bill-item">
                                         <img src={item.img} alt={item.name} className="bill-product-image" />
                                         <div className="bill-item-info">
@@ -335,7 +308,7 @@ const ShoppingPageMini = () => {
                                     {warrantyOptions.map((option) => (
                                         <label
                                             key={option.id}
-                                            className={`warranty-option ${selectedWarranty === option.id ? 'selected' : ''}`}
+                                            className={`warranty-option ${selectedWarranty?.id === option.id ? 'selected' : ''}`}
                                             onClick={(e) => {
                                                 e.preventDefault(); // Prevent default radio button behavior
                                                 handleWarrantyClick(option.id);
@@ -345,7 +318,7 @@ const ShoppingPageMini = () => {
                                                 type="radio"
                                                 name="warranty"
                                                 value={option.id}
-                                                checked={selectedWarranty === option.id}
+                                                checked={selectedWarranty?.id === option.id} // Check if this option is selected
                                                 onChange={() => { }} // Empty onChange to avoid React warning
                                                 className="warranty-radio"
                                             />
@@ -366,13 +339,13 @@ const ShoppingPageMini = () => {
                                     ))}
                                 </div>
                             </div>
-                            <div className="bill-footer1">
+                            <div className="bill-footer2">
                                 <div className="total">
                                     {/* Tính tổng tiền của giỏ hàng, cộng thêm giá gói bảo hành nếu có */}
                                     <h3>
                                         Total: {formatPrice(
-                                            cartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
-                                            (selectedWarranty ? warrantyOptions.find(option => option.id === selectedWarranty)?.price : 0)
+                                            CartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
+                                            (selectedWarranty ? selectedWarranty.price : 0)
                                         )}
                                     </h3>
                                 </div>
@@ -387,11 +360,21 @@ const ShoppingPageMini = () => {
                         <div className="information-step">
                             <div className="form-group1">
                                 <label>Name</label>
-                                <input type="text" placeholder="Enter name" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
                             </div>
                             <div className="form-group1">
                                 <label>Number Phone</label>
-                                <input type="text" placeholder="Enter phone number" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter phone number"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                />
                             </div>
                             <div className="address-group">
                                 <div className="form-group">
@@ -443,7 +426,11 @@ const ShoppingPageMini = () => {
                             </div>
                             <div className="form-group1">
                                 <label>Notes (House number/Specific address)</label>
-                                <textarea placeholder="Enter your detailed address"></textarea>
+                                <textarea
+                                    placeholder="Enter your detailed address"
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                ></textarea>
                             </div>
                             <div className="buttons">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
@@ -497,15 +484,27 @@ const ShoppingPageMini = () => {
                             <div className="total-amount3">
                                 <h3>
                                     Total: {formatPrice(
-                                        cartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
-                                        (selectedWarranty ? warrantyOptions.find(option => option.id === selectedWarranty)?.price : 0)
+                                        CartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
+                                        (selectedWarranty ? selectedWarranty.price : 0)
                                     )}
                                 </h3>
                             </div>
-                            <div className="checkout-footer">
+                            <div className="checkout-footer1">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
                                 { }
-                                <CheckoutButton label="Checkout" />
+                                <CheckoutButton
+                                    label="Checkout"
+                                    data={{
+                                        CartItems, selectedWarranty, userInfo: {
+                                            name,
+                                            phoneNumber,
+                                            selectedProvince,
+                                            selectedDistrict,
+                                            selectedWard,
+                                            notes
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                     )}
