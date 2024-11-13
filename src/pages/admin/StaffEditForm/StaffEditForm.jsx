@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 import "./StaffEditForm.css";
 import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+
 
 const StaffEditForm = () => {
-  const { userId } = useParams(); // Get userId from route params
+  const { userId } = useParams(); 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
@@ -18,20 +21,18 @@ const StaffEditForm = () => {
     create_date: '',
   });
 
-  // Fetch staff data on component mount
   useEffect(() => {
     axios.get(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`)
       .then(response => {
         const fetchedData = response.data;
-  
-        // Format the create_date if it is in "yyyy-dd-MM" format
         let formattedDate = fetchedData.create_date;
+        
+        // Assuming the initial format is 'yyyy-dd-MM' and needs to be 'yyyy-MM-dd'
         if (/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
-          const [year, day, month] = formattedDate.split("-");
+          const [year, month, day] = formattedDate.split("-");
           formattedDate = `${year}-${month}-${day}`;
         }
-  
-        // Update the form data with the formatted date
+        
         setFormData(prevData => ({
           ...prevData,
           ...fetchedData,
@@ -60,17 +61,39 @@ const StaffEditForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    // Update user data on the backend
     axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${userId}`, formData)
       .then(() => {
+        toast.success('User data updated successfully');
         navigate('/admin/adminstafflist'); // Redirect after saving
+  
+        // Optionally, send an email notification for the update
+        emailjs.send('service_8ee1x3i', 'template_qacetss', {
+          user_email: formData.email,
+          user_name: formData.username,
+          role: formData.role,
+          salary: formData.salary,
+          phone: formData.phone,
+          create_date: formData.create_date
+        }, 'pdYoew3qMLB5A3txi')
+          .then(() => {
+            toast.success('Update notification sent successfully');
+          })
+          .catch((error) => {
+            console.error('Failed to send email', error);
+            toast.error('Failed to send email. Please try again.');
+          });
       })
       .catch(error => {
-        console.error("There was an error updating the staff data!", error);
+        console.error("There was an error updating the user data!", error);
+        toast.error('Failed to update user data');
       });
   };
+  
 
   const handleCancel = () => {
-    navigate('/admin/adminstafflist'); // Redirect back to the staff list page
+    navigate('/admin/adminstafflist'); 
   };
 
   return (
@@ -86,7 +109,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="username"
                 name="username"
-                value={formData.username || ''} // Ensure controlled input
+                value={formData.username || ''}
                 onChange={handleChange}
                 required
               />
@@ -98,7 +121,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="email"
                 name="email"
-                value={formData.email || ''} // Ensure controlled input
+                value={formData.email || ''}
                 onChange={handleChange}
                 required
               />
@@ -110,7 +133,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="role"
                 name="role"
-                value={formData.role || ''} // Ensure controlled input
+                value={formData.role || ''}
                 onChange={handleChange}
                 required
               />
@@ -122,7 +145,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="salary"
                 name="salary"
-                value={formData.salary || ''} // Ensure controlled input
+                value={formData.salary || ''}
                 onChange={handleChange}
                 required
               />
@@ -137,7 +160,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="phone"
                 name="phone"
-                value={formData.phone || ''} // Ensure controlled input
+                value={formData.phone || ''}
                 onChange={handleChange}
                 required
               />
@@ -149,7 +172,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="password"
                 name="password"
-                value={formData.password || ''} // Ensure controlled input
+                value={formData.password || ''}
                 onChange={handleChange}
                 required
               />
@@ -167,7 +190,7 @@ const StaffEditForm = () => {
                 className="form-control"
                 id="create_date"
                 name="create_date"
-                value={formData.create_date || ''} // Ensure controlled input
+                value={formData.create_date || ''}
                 onChange={handleChange}
                 required
               />
