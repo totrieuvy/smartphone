@@ -5,6 +5,9 @@ import { FiShoppingCart } from "react-icons/fi";
 import { FaLocationDot, FaMagnifyingGlass, FaRegCircleUser } from "react-icons/fa6";
 import CartModal from '../../../pages/customer/CartModal/CartModal';
 
+
+import img1 from "/assets/assetsCustomer/khanh.png";
+
 const { Search } = Input;
 
 const HeaderCustomer = ({ setSearchQuery }) => {
@@ -21,6 +24,7 @@ const HeaderCustomer = ({ setSearchQuery }) => {
     const onSearch = (value) => {
         setSearchQuery(value);
     };
+
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'profile':
@@ -53,7 +57,7 @@ const HeaderCustomer = ({ setSearchQuery }) => {
     return (
         <header className="header-container">
             <div className="header-left">
-                <img src="src/components/componentCustomer/logo/ShopLogo-removebg-preview.png" alt="Logo" className="logo" />
+                <img src={img1} alt="Logo" className="logo" />
                 <span className="shop-title">Amazing-FPT Shop</span>
             </div>
             <div className="header-center">
@@ -63,7 +67,7 @@ const HeaderCustomer = ({ setSearchQuery }) => {
                     enterButton={<FaMagnifyingGlass />}
                     style={{ width: 450 }}
                     enterButtonStyle={{ backgroundColor: '#dcdcdc', borderColor: '#dcdcdc' }}
-                    onSearch={onSearch} // Trigger search
+                    onSearch={onSearch} 
                 />
             </div>
             <div className="header-right">
