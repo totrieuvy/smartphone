@@ -16,9 +16,9 @@
 .cart {
   position: fixed;
   top: 50%;
-  left: 86%;
+  left: 84%;
   transform: translate(-50%, -50%);
-  max-width: 30%;
+  max-width: 35%;
   width: 70%;
   height: 100%;
   max-height: 100%;
@@ -31,7 +31,7 @@
 
   // Add scrollbar styles
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 0px;
   }
 
   &::-webkit-scrollbar-track {
@@ -100,8 +100,8 @@
   }
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
   }
 
@@ -156,7 +156,6 @@
 .quantity-control {
   display: flex;
   align-items: center;
-  gap: 10px;
 
   .quantity-btn {
     width: 25px;
@@ -255,7 +254,7 @@
   padding: 20px;
   background-color: #1a1a2e;
   margin: 10px;
-  margin-right: 30px;
+  margin-right: 5%;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;

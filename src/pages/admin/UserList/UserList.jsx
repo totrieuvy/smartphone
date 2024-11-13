@@ -161,7 +161,7 @@ const UserList = () => {
         </InputGroup>
 
 
-        <div className="table-resonsive">
+        <div className="table-responsive">
           <table className='table table-borderless datatable'>
             <thead className='table-light'>
               <tr>

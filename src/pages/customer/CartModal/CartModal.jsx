@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import './CartModal.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const CartModal = ({ isOpen, onClose }) => {
@@ -11,6 +11,7 @@ const CartModal = ({ isOpen, onClose }) => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+
 
 
     // Fetch cart items
@@ -24,25 +25,25 @@ const CartModal = ({ isOpen, onClose }) => {
             });
     }, []);
 
-    // Fetch categories
-    useEffect(() => {
-        axios.get('https://6692a166346eeafcf46da14d.mockapi.io/category')
-            .then(response => {
-                setCategories(response.data); // Set the categories from the category API
-            })
-            .catch(error => {
-                console.error("There was an error fetching the category data!", error);
-            });
-    }, []);
+    // // Fetch categories
+    // useEffect(() => {
+    //     axios.get('https://6692a166346eeafcf46da14d.mockapi.io/category')
+    //         .then(response => {
+    //             setCategories(response.data); // Set the categories from the category API
+    //         })
+    //         .catch(error => {
+    //             console.error("There was an error fetching the category data!", error);
+    //         });
+    // }, []);
 
-    // Merge cart items with category data
-    const mergedProducts = products.map(product => {
-        const category = categories.find(cat => cat.id === product.id); // Match by categoryId
-        return {
-            ...product,
-            categoryName: category ? category.name : 'Unknown Category', // Add category name if available
-        };
-    });
+    // // Merge cart items with category data
+    // // const mergedProducts = products.map(product => {
+    // //     const category = categories.find(cat => cat.id === product.id); // Match by categoryId
+    // //     return {
+    // //         ...product,
+    // //         categoryName: category ? category.name : 'Unknown Category', // Add category name if available
+    // //     };
+    // // });
 
     const handleQuantityChange = async (productId, newQuantity) => {
         if (newQuantity < 1) return;
@@ -77,6 +78,7 @@ const CartModal = ({ isOpen, onClose }) => {
     const handleSelectAll = (e) => {
         const isChecked = e.target.checked;
         setSelectAll(isChecked);
+
         setProducts(products.map(product => ({
             ...product,
             selected: isChecked
@@ -92,6 +94,7 @@ const CartModal = ({ isOpen, onClose }) => {
         );
         setProducts(updatedProducts);
         setSelectAll(updatedProducts.every(product => product.selected));
+        console.log("check product select", updatedProducts);
     };
     const handlePayment = () => {
         const selectedProducts = products.filter(product => product.selected);
@@ -100,8 +103,8 @@ const CartModal = ({ isOpen, onClose }) => {
         navigate('/shoppingPageMini', { state: { selectedProducts } });
         console.log("check", selectedProducts);
     };
-    
-    
+
+
 
     const calculateTotal = () => {
         return products
@@ -139,8 +142,8 @@ const CartModal = ({ isOpen, onClose }) => {
                     </label>
                 </div>
                 <div className="cart__items">
-                    {mergedProducts.map(product => (
-                        <div key={product.id} className="cart-item">
+                    {products.map(product => (
+                        <div key={products.id} className="cart-item">
                             <div className="cart-item__content">
                                 <div className="cart-item__image">
                                     <img src={product.img} alt={product.name} />

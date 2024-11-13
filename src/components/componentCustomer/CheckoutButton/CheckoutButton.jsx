@@ -1,15 +1,18 @@
 
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CheckoutButton = ({ label = "Checkout", onClick }) => {
+const CheckoutButton = ({ label = "Checkout", onClick, data }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     if (onClick) {
       onClick();
     }
-    navigate("/productDetailCustomer");
+    navigate("/productDetailCustomer", { state: { data } });
+    console.log('data:', data);
+    console.log('Selected cartData:', data.userInfo);
   };
 
   return (
@@ -20,3 +23,4 @@ const CheckoutButton = ({ label = "Checkout", onClick }) => {
 };
 
 export default CheckoutButton;
+

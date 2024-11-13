@@ -71,7 +71,7 @@ const HeaderCustomer = ({ setSearchQuery }) => {
                 />
             </div>
             <div className="header-right">
-                <div className="header-icon">
+            <div className="header-icon" onClick={() => handleCartClick()}>
                     <FiShoppingCart className="icon" />
                     <span className='Header-Cart'>Cart</span>
                 </div>

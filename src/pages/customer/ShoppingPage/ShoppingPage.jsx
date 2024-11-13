@@ -10,16 +10,24 @@ import CheckoutButton from '../../../components/componentCustomer/CheckoutButton
 
 const ShoppingPage = () => {
     const location = useLocation();
-    const product = location.state?.product;
+    const { product } = location.state || {};
 
-    if (!product) {
-        return <p>No product data found.</p>;
-    }
+    useEffect(() => {
+        if (product) {
+            console.log(product);
+        }
+    }, [product]);
 
-    const [selectedWarranty, setSelectedWarranty] = useState(null);
+
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [selected, setSelected] = useState(null);
+    const [cartItems, setCartItems] = useState([{ ...product, quantity: 1 }]);
+
+
+
+
+    const [selectedWarranty, setSelectedWarranty] = useState(null);
 
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -28,8 +36,9 @@ const ShoppingPage = () => {
     const [selectedProvince, setSelectedProvince] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [selectedWard, setSelectedWard] = useState('');
-
-    const [cartItems, setCartItems] = useState([{ ...product, quantity: 1 }]);
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [notes, setNotes] = useState('');
 
 
     const warrantyOptions = [
@@ -57,8 +66,18 @@ const ShoppingPage = () => {
             price: 79.99,
             originalPrice: null
         }
-
     ];
+
+    const handleWarrantyClick = (id) => {
+        const selectedWarranty = warrantyOptions.find(option => option.id === id);
+        if (!selectedWarranty) return;
+        setSelectedWarranty(selectedWarranty);
+    };
+
+
+
+
+
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-US', {
@@ -79,7 +98,6 @@ const ShoppingPage = () => {
 
     const warrantyItems = [
         'Bao test 15 ngày 1 đổi 1, đổi màu và đổi dung lượng miễn phí (đối dòng khác khấu trừ 10-15% trong 7 ngày đầu)',
-        'Bảo hành tiêu chuẩn 6 tháng tại Dế Mobile',
         'Bảo hành thay pin miễn phí (khi pin chai/ hư trong thời gian còn hạn bảo hành)',
         'Bảo hành phụ kiện miễn phí (trọn đời - không giới hạn thời gian)'
     ];
@@ -169,9 +187,7 @@ const ShoppingPage = () => {
     const handleShoppingContinue = () => {
         navigate('/category/1');
     };
-    const handleWarrantyClick = (id) => {
-        setSelectedWarranty(currentSelected => currentSelected === id ? null : id);
-    };
+
 
     return (
         <div className="shopping-container">
@@ -293,7 +309,7 @@ const ShoppingPage = () => {
                                     {warrantyOptions.map((option) => (
                                         <label
                                             key={option.id}
-                                            className={`warranty-option ${selectedWarranty === option.id ? 'selected' : ''}`}
+                                            className={`warranty-option ${selectedWarranty?.id === option.id ? 'selected' : ''}`}
                                             onClick={(e) => {
                                                 e.preventDefault(); // Prevent default radio button behavior
                                                 handleWarrantyClick(option.id);
@@ -303,7 +319,7 @@ const ShoppingPage = () => {
                                                 type="radio"
                                                 name="warranty"
                                                 value={option.id}
-                                                checked={selectedWarranty === option.id}
+                                                checked={selectedWarranty?.id === option.id} // Check if this option is selected
                                                 onChange={() => { }} // Empty onChange to avoid React warning
                                                 className="warranty-radio"
                                             />
@@ -323,6 +339,9 @@ const ShoppingPage = () => {
                                         </label>
                                     ))}
                                 </div>
+
+
+
                             </div>
                             <div className="bill-footer">
                                 <div className="total">
@@ -330,9 +349,10 @@ const ShoppingPage = () => {
                                     <h3>
                                         Total: {formatPrice(
                                             cartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
-                                            (selectedWarranty ? warrantyOptions.find(option => option.id === selectedWarranty)?.price : 0)
+                                            (selectedWarranty ? selectedWarranty.price : 0) // Add price of selected warranty
                                         )}
                                     </h3>
+
                                 </div>
                                 <button className="primary-btn" onClick={handleNextStep}>
                                     Continue
@@ -345,11 +365,21 @@ const ShoppingPage = () => {
                         <div className="information-step">
                             <div className="form-group1">
                                 <label>Name</label>
-                                <input type="text" placeholder="Enter name" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
                             </div>
                             <div className="form-group1">
                                 <label>Number Phone</label>
-                                <input type="text" placeholder="Enter phone number" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter phone number"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                />
                             </div>
                             <div className="address-group">
                                 <div className="form-group">
@@ -401,7 +431,11 @@ const ShoppingPage = () => {
                             </div>
                             <div className="form-group1">
                                 <label>Notes (House number/Specific address)</label>
-                                <textarea placeholder="Enter your detailed address"></textarea>
+                                <textarea
+                                    placeholder="Enter your detailed address"
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                ></textarea>
                             </div>
                             <div className="buttons">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
@@ -456,23 +490,37 @@ const ShoppingPage = () => {
                                 <h3>
                                     Total: {formatPrice(
                                         cartItems.reduce((total, item) => total + item.price * item.quantity, 0) +
-                                        (selectedWarranty ? warrantyOptions.find(option => option.id === selectedWarranty)?.price : 0)
+                                        (selectedWarranty ? selectedWarranty.price : 0) // Add price of selected warranty
                                     )}
                                 </h3>
                             </div>
+
                             <div className="checkout-footer">
                                 <button className="secondary-btn" onClick={handlePrevStep}>Back</button>
                                 { }
-                                <CheckoutButton label="Checkout" />
+                                <CheckoutButton
+                                    label="Checkout"
+                                    data={{
+                                        cartItems, selectedWarranty, userInfo: {
+                                            name,
+                                            phoneNumber,
+                                            selectedProvince,
+                                            selectedDistrict,
+                                            selectedWard,
+                                            notes
+                                        }
+                                    }}
+                                />
                             </div>
+
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     );
 };
+
 
 export default ShoppingPage;
 
