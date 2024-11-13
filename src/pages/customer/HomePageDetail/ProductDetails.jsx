@@ -18,7 +18,9 @@ const ProductDetails = () => {
       try {
         const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
         const data = await response.json();
-        const selectedProduct = data.find((prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString());
+        const selectedProduct = data.find(
+          (prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString()
+        );
         setProduct(selectedProduct);
       } catch (err) {
         setError("Failed to fetch product details");
@@ -37,7 +39,6 @@ const ProductDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (!product) return <p>Product not found</p>;
-
 
   const addToCart = async () => {
     if (product) {
@@ -70,9 +71,10 @@ const ProductDetails = () => {
   const handleBuyClick = () => {
     if (product) {
       navigate('/shoppingPage', { state: { product } });
-      console.log("check",product);
+      console.log("check", product);
     }
   };
+
   const handleBuyInstallClick = () => {
     if (product) {
       navigate('/shoppingPageAProduct', { state: { product } });
@@ -92,7 +94,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-           <div className="specifications-container">
+      <div className="specifications-container">
         <div className="specifications-column">
           <h1 className="title">Thông số nổi bật</h1>
           {product.screen_size && (
@@ -197,7 +199,7 @@ const ProductDetails = () => {
       </div>
 
       <div className="button-link" style={{ display: "flex", gap: "10px" }}>
-      <Button variant="outline-primary" className="icon-cart" onClick={addToCart}>
+        <Button variant="outline-primary" className="icon-cart" onClick={addToCart}>
           <FaShoppingCart />
         </Button>
         <Button variant="primary" className="buy" onClick={handleBuyClick}>
@@ -206,7 +208,7 @@ const ProductDetails = () => {
         <Button variant="secondary" className="buy-install" onClick={handleBuyInstallClick}>
           Mua trả góp
         </Button>
-        <Button variant="success" className="feedback">
+        <Button variant="success" className="feedback" onClick={handleFeedbackClick}>
           Đánh giá
         </Button>
       </div>

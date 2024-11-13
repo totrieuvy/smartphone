@@ -1,5 +1,4 @@
-// HeaderCustomer.jsx
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Input } from 'antd';
 import './HeaderCustomer.css';
 import { FiShoppingCart } from "react-icons/fi";
@@ -8,18 +7,21 @@ import CartModal from '../../../pages/customer/CartModal/CartModal';
 
 const { Search } = Input;
 
-const HeaderCustomer = () => {
+const HeaderCustomer = ({ setSearchQuery }) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const closeCartModal = () => {
         setIsCartOpen(false); 
     };
-    const handleOpenModal = () => {
-        setModalOpen(true);
-    };
+
     const handleCartClick = () => {
         setIsCartOpen(true);
     };
+
+    const onSearch = (value) => {
+        setSearchQuery(value);
+    };
+
     return (
         <header className="header-container">
             <div className="header-left">
@@ -32,12 +34,12 @@ const HeaderCustomer = () => {
                     className="search-bar"
                     enterButton={<FaMagnifyingGlass />}
                     style={{ width: 450 }}
-                    // Custom style for the search button color
                     enterButtonStyle={{ backgroundColor: '#dcdcdc', borderColor: '#dcdcdc' }}
+                    onSearch={onSearch} // Trigger search
                 />
             </div>
             <div className="header-right">
-            <div className="header-icon" onClick={() => handleCartClick()}>
+                <div className="header-icon" onClick={handleCartClick}>
                     <FiShoppingCart className="icon" />
                     <span className='Header-Cart'>Cart</span>
                 </div>

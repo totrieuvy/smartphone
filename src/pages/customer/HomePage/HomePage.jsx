@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import Swal from 'sweetalert2';
 import img1 from "/assets/assetsCustomer/a1.jpg";
 import img2 from "/assets/assetsCustomer/a2.jpg";
 import img3 from "/assets/assetsCustomer/a3.jpg";
@@ -14,7 +15,7 @@ import "swiper/css/autoplay";
 
 const slides = [img1, img2, img3, img4, img5, img6];
 
-const HomePage = () => {
+const HomePage = ({ searchQuery }) => {
   const { category: paramCategory } = useParams();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -45,26 +46,39 @@ const HomePage = () => {
     fetchCategories();
   }, [paramCategory, navigate]);
 
-  // Fetch products based on selected category
+  // Fetch products based on selected category or search query
   useEffect(() => {
-    if (paramCategory) {
-      const fetchProducts = async () => {
-        setLoadingProducts(true);
-        try {
-          const productResponse = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
-          const productsData = await productResponse.json();
-          const categoryProducts = productsData.filter((product) => product.category === paramCategory);
-          setProducts(categoryProducts);
-        } catch (err) {
-          setError("Failed to fetch products");
-        } finally {
-          setLoadingProducts(false);
-        }
-      };
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const productResponse = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
+        const productsData = await productResponse.json();
+        let filteredProducts = productsData;
 
-      fetchProducts();
-    }
-  }, [paramCategory]);
+        if (searchQuery) {
+          filteredProducts = productsData.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        } else if (paramCategory) {
+          filteredProducts = productsData.filter((product) => product.category === paramCategory);
+        }
+
+        if (filteredProducts.length === 0) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No products found!',
+          });
+        }
+
+        setProducts(filteredProducts);
+      } catch (err) {
+        setError("Failed to fetch products");
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, [paramCategory, searchQuery]);
 
   if (loadingCategories) return <p>Loading categories...</p>;
   if (error) return <p>{error}</p>;
