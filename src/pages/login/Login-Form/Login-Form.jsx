@@ -87,11 +87,11 @@ const Login = ({ termsRef }) => {
       setIsSubmitting(false);
     }
   };
-  
+
   const handleSignUp = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-  
+
     // Check if all fields are filled out
     if (!username || !email || !password || !confirmPassword) {
       Swal.fire({
@@ -102,7 +102,7 @@ const Login = ({ termsRef }) => {
       setIsSubmitting(false);
       return;
     }
-  
+
     // Validate email format
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
@@ -114,7 +114,7 @@ const Login = ({ termsRef }) => {
       setIsSubmitting(false);
       return;
     }
-  
+
     // Check if passwords match
     if (password !== confirmPassword) {
       Swal.fire({
@@ -126,7 +126,7 @@ const Login = ({ termsRef }) => {
       setIsSubmitting(false);
       return;
     }
-  
+
     // Check if the terms are agreed to
     if (!isChecked) {
       Swal.fire({
@@ -137,7 +137,7 @@ const Login = ({ termsRef }) => {
       setIsSubmitting(false);
       return;
     }
-  
+
     try {
       const user = await createAccount(username, email, password);
       if (user) {
@@ -161,7 +161,7 @@ const Login = ({ termsRef }) => {
     }
     setIsSubmitting(false);
   };
-  
+
 
   const handleTermsClick = (e) => {
     e.preventDefault();
@@ -261,7 +261,7 @@ const Login = ({ termsRef }) => {
           </Components.OverlayContainer>
         </Components.Container>
       </div>
-    </>
+    </> 
   );
 };
 

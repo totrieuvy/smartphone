@@ -4,14 +4,13 @@ import { Input, Dropdown, Menu } from 'antd';
 import './HeaderCustomer.css';
 import { FiShoppingCart } from "react-icons/fi";
 import { FaLocationDot, FaMagnifyingGlass, FaRegCircleUser } from "react-icons/fa6";
-
 const { Search } = Input;
 
 const HeaderCustomer = () => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'profile':
-                window.location.href = '/customer/profile';
+                window.location.href = '/login';
                 break;
             case 'changePassword':
                 window.location.href = '/customer/change-password';
@@ -40,7 +39,7 @@ const HeaderCustomer = () => {
     return (
         <header className="header-container">
             <div className="header-left">
-                <img src="src/components/componentCustomer/logo/ShopLogo-removebg-preview.png" alt="Logo" className="logo" />
+                <img src="src\components\componentCustomer\logo\ShopLogo-removebg-preview.png" alt="Logo" className="logo" />
                 <span className="shop-title" onClick={() => window.location.href = '/'} style={{ cursor: 'pointer' }}>
                     Amazing-FPT Shop
                 </span>
