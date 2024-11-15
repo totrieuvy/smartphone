@@ -1,45 +1,33 @@
-import React, {useState , useEffect} from 'react'
-import axios from 'axios';
-import './AdminDashboard.css'
+import React from 'react';
+import './AdminDashboard.css';
 
-import PageTitle from '../AdditionalSections/PageTitle/PageTitle'
+import PageTitle from '../AdditionalSections/PageTitle/PageTitle';
 import Card from '../AdditionalSections/Card/Card';
-import Report from '../AdditionalSections/Report/REport';
+import Report from '../AdditionalSections/Report/Report';
 import RecentSales from '../AdditionalSections/RecentSales/RecentSales';
 import TopSelling from '../AdditionalSections/TopSelling/TopSelling';
 
 const AdminDashboard = () => {
-  const [cards, setCards] = useState([])
-
-  useEffect(() => {
-    axios.get('http://localhost:4000/cards')
-      .then(response => setCards(response.data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
   return (
-    <main id='main' className='main'>
-      <PageTitle page="Dashboard"/>
+    <main id="main" className="main">
+      <PageTitle page="Dashboard" />
 
-      <section className='dashboard section'>
+      <section className="dashboard section">
         <div className="row">
-          {
-            cards && cards.length > 0 &&
-            cards.map(card => <Card key={card._id} card={card}/>)
-          }
+          <Card /> {/* Render 4 cards từ Card.jsx */}
           <div className="col-12">
-            <Report/>
+            <Report />
           </div>
           <div className="col-12">
-            <RecentSales/>
+            <RecentSales />
           </div>
           <div className="col-12">
-            <TopSelling/>
+            <TopSelling />
           </div>
         </div>
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;

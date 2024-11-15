@@ -1,12 +1,30 @@
-// HeaderCustomer.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Input, Dropdown, Menu } from 'antd';
 import './HeaderCustomer.css';
 import { FiShoppingCart } from "react-icons/fi";
 import { FaLocationDot, FaMagnifyingGlass, FaRegCircleUser } from "react-icons/fa6";
+import CartModal from '../../../pages/customer/CartModal/CartModal';
+
+
+import img1 from "/assets/assetsCustomer/khanh.png";
+
 const { Search } = Input;
 
-const HeaderCustomer = () => {
+const HeaderCustomer = ({ setSearchQuery }) => {
+    const [isCartOpen, setIsCartOpen] = useState(false);
+
+    const closeCartModal = () => {
+        setIsCartOpen(false); 
+    };
+
+    const handleCartClick = () => {
+        setIsCartOpen(true);
+    };
+
+    const onSearch = (value) => {
+        setSearchQuery(value);
+    };
+
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'profile':
@@ -39,10 +57,8 @@ const HeaderCustomer = () => {
     return (
         <header className="header-container">
             <div className="header-left">
-                <img src="src\components\componentCustomer\logo\ShopLogo-removebg-preview.png" alt="Logo" className="logo" />
-                <span className="shop-title" onClick={() => window.location.href = '/'} style={{ cursor: 'pointer' }}>
-                    Amazing-FPT Shop
-                </span>
+                <img src={img1} alt="Logo" className="logo" />
+                <span className="shop-title">Amazing-FPT Shop</span>
             </div>
             <div className="header-center">
                 <Search
@@ -51,10 +67,11 @@ const HeaderCustomer = () => {
                     enterButton={<FaMagnifyingGlass />}
                     style={{ width: 450 }}
                     enterButtonStyle={{ backgroundColor: '#dcdcdc', borderColor: '#dcdcdc' }}
+                    onSearch={onSearch} 
                 />
             </div>
             <div className="header-right">
-                <div className="header-icon">
+            <div className="header-icon" onClick={() => handleCartClick()}>
                     <FiShoppingCart className="icon" />
                     <span className='Header-Cart'>Cart</span>
                 </div>
@@ -69,6 +86,8 @@ const HeaderCustomer = () => {
                     <span>Hồ Chí Minh</span>
                 </div>
             </div>
+
+            <CartModal isOpen={isCartOpen} onClose={closeCartModal} />
         </header>
     );
 };

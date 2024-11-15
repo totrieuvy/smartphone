@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
+import { toast } from "react-toastify";
 import "./ProductDetail.css";
 
 const ProductDetails = () => {
@@ -17,7 +18,9 @@ const ProductDetails = () => {
       try {
         const response = await fetch("https://669475034bd61d8314c77f1a.mockapi.io/khanh");
         const data = await response.json();
-        const selectedProduct = data.find((prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString());
+        const selectedProduct = data.find(
+          (prod) => prod.id === id || prod.id === Number(id) || prod.id.toString() === id.toString()
+        );
         setProduct(selectedProduct);
       } catch (err) {
         setError("Failed to fetch product details");
@@ -37,6 +40,56 @@ const ProductDetails = () => {
   if (error) return <p>{error}</p>;
   if (!product) return <p>Product not found</p>;
 
+  const addToCart = async () => {
+    if (product) {
+      if (product.stock > 0) {
+        try {
+          console.log("Product to add to cart:", {
+            ...product,
+            quantity: 1, // Set quantity to 1 when adding to cart
+          });
+
+          // Make the POST request to add the product to the cart
+          const response = await fetch("https://664f6ea2ec9b4a4a602ec579.mockapi.io/cart", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              product_id: product.id,  // Use the product id from the client
+              ...product,
+              quantity: 1, // Set quantity to 1
+            }),
+          });
+
+          // Check if the request was successful
+          if (response.ok) {
+            toast.success("Product added to cart successfully!");
+          } else {
+            toast.error("Failed to add product to cart.");
+          }
+        } catch (error) {
+          toast.error("Error adding product to cart");
+        }
+      } else {
+        toast.warn("This product is out of stock!");
+      }
+    }
+  };
+
+  const handleBuyClick = () => {
+    if (product) {
+      navigate('/shoppingPage', { state: { product } });
+      console.log("check", product);
+    }
+  };
+
+  const handleBuyInstallClick = () => {
+    if (product) {
+      navigate('/shoppingPageAProduct', { state: { product } });
+    }
+  };
+
   return (
     <div>
       <div className="product-container">
@@ -50,7 +103,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-           <div className="specifications-container">
+      <div className="specifications-container">
         <div className="specifications-column">
           <h1 className="title">Thông số nổi bật</h1>
           {product.screen_size && (
@@ -155,13 +208,13 @@ const ProductDetails = () => {
       </div>
 
       <div className="button-link" style={{ display: "flex", gap: "10px" }}>
-        <Button variant="outline-primary" className="icon-cart">
+        <Button variant="outline-primary" className="icon-cart" onClick={addToCart}>
           <FaShoppingCart />
         </Button>
-        <Button variant="primary" className="buy">
+        <Button variant="primary" className="buy" onClick={handleBuyClick}>
           Mua ngay
         </Button>
-        <Button variant="secondary" className="buy-install">
+        <Button variant="secondary" className="buy-install" onClick={handleBuyInstallClick}>
           Mua trả góp
         </Button>
         <Button variant="success" className="feedback" onClick={handleFeedbackClick}>
@@ -172,4 +225,5 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetails;      
+              
