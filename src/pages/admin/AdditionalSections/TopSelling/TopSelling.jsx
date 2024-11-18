@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import './TopSelling.css'
-import CardFilter from '../CardFilter/CardFilter';
 import TopSellingItem from '../TopSellingItem/TopSellingItem';
 
 const TopSelling = () => {
     const [items, setItems] = useState([])
-    const [filter, setFilter] = useState('Today');
-    const handleFilterChange = filter => {
-        setFilter(filter)
-    }
 
     useEffect(() => {
         axios.get('http://localhost:4000/topselling')
@@ -19,11 +14,10 @@ const TopSelling = () => {
 
     return (
         <div className='card top-selling overflow-auto'>
-            <CardFilter filterChange={handleFilterChange} />
 
             <div className="card-body pb-0">
                 <h5 className="card-title">
-                    Top Selling <span>| {filter}</span>
+                    Top Selling
                 </h5>
 
                 <table className='table table-borderless'>

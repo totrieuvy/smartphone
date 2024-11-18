@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Card.css';
-import CardFilter from '../CardFilter/CardFilter';
 
 const Card = () => {
-  const [filter, setFilter] = useState('Today');
   const [cards, setCards] = useState([]);
-
-  const handleFilterChange = (filter) => {
-    setFilter(filter);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,10 +57,9 @@ const Card = () => {
       {cards.map((card, index) => (
         <div className="col-xxl-3 col-md-4">
           <div className="card info-card sales-card">
-            <CardFilter filterChange={handleFilterChange} />
             <div className="card-body" key={index}>
               <h5 className="card-title">
-                {card.name} <span>| {filter}</span>
+                {card.name}
               </h5>
               <div className="d-flex align-items-center">
                 <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
