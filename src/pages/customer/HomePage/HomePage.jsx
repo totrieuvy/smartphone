@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import Swal from "sweetalert2";
-import img1 from "/assets/assetsCustomer/a1.jpg";
+import img1 from "/assets/assetsCustomer/a1.png";
 import img2 from "/assets/assetsCustomer/a2.jpg";
 import img3 from "/assets/assetsCustomer/a3.jpg";
 import img4 from "/assets/assetsCustomer/a4.jpg";
 import img5 from "/assets/assetsCustomer/a5.jpg";
 import img6 from "/assets/assetsCustomer/a6.jpg";
+import img7 from "/assets/assetsCustomer/tt.jpg";
 import "./HomePage.css";
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -189,8 +191,26 @@ const HomePage = ({ searchQuery }) => {
         </Swiper>
       </div>
 
-      <div>
+      <div className="nav-main">
         <nav className="navbar">
+        <img
+            src={img1}
+            alt="Category Icon"
+            style={{
+              marginRight: "75px",
+              width: "50px",
+              height: "50px",
+            }}
+          />
+          <img
+            src={img1}
+            alt="Category Icon"
+            style={{
+              marginRight: "25px",
+              width: "50px",
+              height: "50px",
+            }}
+          />
           <ul>
             {categories.map((category) => (
               <li key={category.id}>
@@ -212,7 +232,7 @@ const HomePage = ({ searchQuery }) => {
             {products.map((product) => (
               <div key={product.id} className="product-card">
                 <img src={product.img} alt={product.name} />
-                <h2  className="name">{product.name}</h2>
+                <h2 className="name">{product.name}</h2>
                 <div className="quanlity">{product.quanlity}</div>
                 <div className="price">Price: ${product.price.toFixed(2)}</div>
                 <p>Stock: {product.stock}</p>
@@ -227,7 +247,7 @@ const HomePage = ({ searchQuery }) => {
           </div>
         )}
       </div>
-      <div>
+      <div className="all-view">
         {viewedProducts.length > 0 && (
           <div className="viewed-products">
             <button
@@ -268,6 +288,17 @@ const HomePage = ({ searchQuery }) => {
           </div>
         )}
       </div>
+      <Carousel data-bs-theme="dark">
+        <Carousel.Item>
+          <img src={img7} alt="1 slide" className="" />
+        </Carousel.Item>
+        <Carousel.Item>
+          <img src={img7} alt="2 slide" className="" />
+        </Carousel.Item>
+        <Carousel.Item>
+          <img src={img7} alt="3 slide" className="" />
+        </Carousel.Item>
+      </Carousel>
     </div>
   );
 };
