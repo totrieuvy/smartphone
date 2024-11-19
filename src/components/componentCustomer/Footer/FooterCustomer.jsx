@@ -1,7 +1,9 @@
 // FooterCustomer.jsx
 import React from 'react';
 import './FooterCustomer.css';
-
+import Amazon from "/assets/assetsCustomer/Amazon.png";
+import CellPhoneS from "/assets/assetsCustomer/CellPhoneS.jpg";
+import TGDD from "/assets/assetsCustomer/TGDD.webp";
 const FooterCustomer = () => {
     return (
         <footer className="footer-container">
@@ -28,13 +30,13 @@ const FooterCustomer = () => {
                 <h3>Our collaborators</h3>
                 <div className="collaborators-logos">
                     <a href="https://cellphones.com.vn/" target="_blank" rel="noopener noreferrer">
-                        <img src="src/components/componentCustomer/logo/logo-cellphones.jpg" alt="CellPhoneS" />
+                        <img src={CellPhoneS} alt="CellPhoneS" />
                     </a>
                     <a href="https://www.thegioididong.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="src/components/componentCustomer/logo/Amazon.png" alt="Amazon" />
+                        <img src={Amazon} alt="Amazon" />
                     </a>
                     <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="src/components/componentCustomer/logo/Thegioigidong.webp" alt="TheGioiDiDong" />
+                        <img src={TGDD} alt="TheGioiDiDong" />
                     </a>
                 </div>
             </div>

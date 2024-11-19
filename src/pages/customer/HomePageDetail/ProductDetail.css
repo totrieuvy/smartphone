@@ -30,16 +30,15 @@
 
 .specifications-column {
   flex: 1.5;
-  margin: 0 10px;
+  margin: 0 30px;
 }
 .specifications-columns {
   flex: 1;
-  margin: 0 50px;
-  margin-top: 80px;
+  margin: 0 25px;
+  margin-top: 10px;
 }
 .specifications-column .key {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 20px;
 }
 
 .specifications-column .value {
@@ -49,12 +48,9 @@
   display: flex;
   flex-direction: column;
 }
-.text {
-  margin-bottom: 25px;
-}
 
 .value {
-  font-size: 14px;
+  font-size: 25px;
   font-weight: bold;
 }
 .button-link {
@@ -104,4 +100,91 @@
   border-radius: 5px;
   font-size: 35px;
   color: black;
+}
+.specifications-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Chia 2 cột đều nhau */
+  gap: 16px; /* Khoảng cách giữa các phần tử */
+}
+
+.specification-item {
+  background-color: #f9f9f9; /* Màu nền cho từng phần tử */
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.specification-item .key {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.specification-item .value {
+  color: #007bff;
+}
+
+.specification-item .text {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+.specification-item:hover {
+  background-color: #eef5ff;
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
+.info-column {
+  border: 2px solid #007bff; /* Đường viền xanh */
+  border-radius: 5px; /* Bo góc */
+  padding: 15px; /* Khoảng cách bên trong */
+  margin-top: 10px; /* Khoảng cách phía trên */
+  background-color: #f9f9f9; /* Màu nền nhạt */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+.info-column h1 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.info-column p,
+.info-column div {
+  margin: 5px 0;
+}
+.battery-value {
+  border: 2px solid #007bff; /* Đường viền màu xanh */
+  padding: 2px 6px; /* Khoảng cách trong */
+  border-radius: 4px; /* Bo góc */
+  background-color: #e9f5ff; /* Màu nền nhạt */
+  font-weight: bold; /* Chữ đậm */
+  color: #0056b3; /* Màu chữ */
+}
+.price-value {
+  color: #0056b3;
+}
+.title {
+  text-align: center;
+}
+.text {
+  font-size: 14px;
+  font-style: italic;
+  color: blue;
+}
+.key {
+  font-size: 50px;
+}
+.po-product {
+  font-size: 22px;
+  margin-top: 25px;
+}
+.real-product {
+  margin-left: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+.name-title:hover {
+  color: #007bff;
+  transform: scale(1.02);
+  transition: all 0.3s ease;
 }
