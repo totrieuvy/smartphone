@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { DesktopOutlined, PieChartOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
+import { PieChartOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Dropdown, theme } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
@@ -19,11 +19,6 @@ function SidebarStaff() {
       key: "feedback",
       icon: <PieChartOutlined />,
       label: "Feedback",
-    },
-    {
-      key: "transaction",
-      icon: <DesktopOutlined />,
-      label: "Transaction",
     },
     {
       key: "dashboard",
