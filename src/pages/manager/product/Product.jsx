@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Switch, Table } from "antd";
+import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Switch, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import "./index.scss";
 import axios from "axios";
@@ -86,6 +86,12 @@ function Product() {
       dataIndex: "img",
       key: "img",
       render: (img) => <img src={img} alt="product" width={100} />,
+    },
+    {
+      title: "STATUS",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => (status ? <Tag color="green">Active</Tag> : <Tag color="red">Not Active</Tag>),
     },
     {
       title: "ACTION",
