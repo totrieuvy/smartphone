@@ -23,7 +23,7 @@ function Customer() {
   const fetchData = async () => {
     try {
       const response = await axios.get("https://6692a166346eeafcf46da14d.mockapi.io/account");
-      const filterUser = response.data.filter((user) => user.role === "user");
+      const filterUser = response.data.filter((user) => user.role === "customer");
       setDataSource(filterUser);
     } catch (error) {
       console.log(error);
@@ -39,8 +39,8 @@ function Customer() {
   const columns = [
     {
       title: "NAME",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "PHONE",
@@ -130,7 +130,7 @@ function Customer() {
     setLoading(true);
     try {
       await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
-        name: values.name,
+        username: values.username,
         phone: values.phone,
         email: values.email,
       });

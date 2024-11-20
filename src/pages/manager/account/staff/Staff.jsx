@@ -24,8 +24,8 @@ function Staff() {
   const columns = [
     {
       title: "NAME",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "PHONE",
@@ -88,7 +88,7 @@ function Staff() {
               >
                 Update
               </Button>
-              <Button danger type="primary" onClick={() => handleOpenDeleteModal(id, record.name, record.email)}>
+              <Button danger type="primary" onClick={() => handleOpenDeleteModal(id, record.username, record.email)}>
                 Delete
               </Button>
             </>
@@ -133,16 +133,16 @@ function Staff() {
     setLoading(true);
     try {
       if (isUpdate && id) {
-        await axios.put(`https://6678e6e40bd452505620352b.mockapi.io/Accounts/${id}`, {
-          name: values.name,
+        await axios.put(`https://6692a166346eeafcf46da14d.mockapi.io/account/${id}`, {
+          username: values.username,
           phone: values.phone,
           email: values.email,
           salary: values.salary,
         });
         toast.success("Update staff successfully");
       } else {
-        await axios.post("https://6678e6e40bd452505620352b.mockapi.io/Accounts", {
-          name: values.name,
+        await axios.post("https://6692a166346eeafcf46da14d.mockapi.io/account", {
+          username: values.username,
           phone: values.phone,
           password: values.password,
           email: values.email,
@@ -242,7 +242,7 @@ function Staff() {
       >
         <Form form={form} labelCol={{ span: 24 }} onFinish={handleFinish}>
           <Form.Item
-            name="name"
+            name="username"
             label="Staff name"
             rules={[
               {

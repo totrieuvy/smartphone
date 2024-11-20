@@ -85,7 +85,7 @@ function Product() {
       title: "IMAGE",
       dataIndex: "img",
       key: "img",
-      render: (img) => <img src={img} alt="product" width={100} />,
+      render: (img) => <img src={img} alt="product" width={100} className="image" />,
     },
     {
       title: "STATUS",
