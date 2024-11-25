@@ -1,155 +1,144 @@
-import React, { useEffect, useState } from 'react';
-import { ArrowUpRight, Info } from 'lucide-react';
-import './ProductDetailCustomer.scss';
-import { useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useEffect, useState } from "react";
+import { ArrowUpRight, Info } from "lucide-react";
+import "./ProductDetailCustomer.scss";
+import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetailCustomer = () => {
   const navigate = useNavigate();
-
 
   const location = useLocation();
   const data = location.state?.data;
   const selectedWarranty = data?.selectedWarranty;
   const downPayment = data?.downPayment;
   const userInfo = data?.userInfo;
-  const currentDate = new Date().toLocaleDateString('en-GB');
+  const currentDate = new Date().toLocaleDateString("en-GB");
   const [isProcessing, setIsProcessing] = useState(false);
-
 
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 2); // Thêm 5 ngày
-  const formattedDeliveryDate = deliveryDate.toLocaleDateString('en-GB');
+  const formattedDeliveryDate = deliveryDate.toLocaleDateString("en-GB");
 
+  const [provinceName, setProvinceName] = useState("");
+  const [districtName, setDistrictName] = useState("");
+  const [wardName, setWardName] = useState("");
 
-  const [provinceName, setProvinceName] = useState('');
-  const [districtName, setDistrictName] = useState('');
-  const [wardName, setWardName] = useState('');
-
-
-  const { selectedProvince, selectedDistrict, selectedWard, address, notes } = userInfo || {};
-
+  const { selectedProvince, selectedDistrict, selectedWard, address, notes } =
+    userInfo || {};
 
   useEffect(() => {
-    // Fetch Province Name
     const fetchProvinceName = async () => {
       if (selectedProvince) {
         try {
-          const response = await fetch(`https://provinces.open-api.vn/api/p/${selectedProvince}`);
+          const response = await fetch(
+            `https://provinces.open-api.vn/api/p/${selectedProvince}`
+          );
           const data = await response.json();
           setProvinceName(data.name);
         } catch (error) {
-          console.error('Error fetching province name:', error);
+          console.error("Error fetching province name:", error);
         }
       }
     };
 
-
-    // Fetch District Name
     const fetchDistrictName = async () => {
       if (selectedDistrict) {
         try {
-          const response = await fetch(`https://provinces.open-api.vn/api/d/${selectedDistrict}`);
+          const response = await fetch(
+            `https://provinces.open-api.vn/api/d/${selectedDistrict}`
+          );
           const data = await response.json();
           setDistrictName(data.name);
         } catch (error) {
-          console.error('Error fetching district name:', error);
+          console.error("Error fetching district name:", error);
         }
       }
     };
 
-
-    // Fetch Ward Name
     const fetchWardName = async () => {
       if (selectedWard) {
         try {
-          const response = await fetch(`https://provinces.open-api.vn/api/w/${selectedWard}`);
+          const response = await fetch(
+            `https://provinces.open-api.vn/api/w/${selectedWard}`
+          );
           const data = await response.json();
           setWardName(data.name);
         } catch (error) {
-          console.error('Error fetching ward name:', error);
+          console.error("Error fetching ward name:", error);
         }
       }
     };
 
-
-    // Call each fetch function
     fetchProvinceName();
     fetchDistrictName();
     fetchWardName();
   }, [selectedProvince, selectedDistrict, selectedWard]);
 
-
-
-
   if (!data) {
     return <p>No data provided</p>;
   }
 
-
   const shippingDetails = {
-    shipping: 'Viet Nam',
+    shipping: "Viet Nam",
   };
-
 
   const paymentDetails = {
-    shipping: 40.00,
-    vatTax: 100.00,
-    total: 766.86
+    shipping: 40.0,
+    vatTax: 100.0,
+    total: 766.86,
   };
 
-
- 
   const handlePayment = async () => {
     try {
       setIsProcessing(true);
-  
-      // 1. Validate Cart and Fetch Products Efficiently
-      const cartItems = data.cartItems || data.CartItems; // Access cart items
-  
+
+      const cartItems = data.cartItems || data.CartItems;
+
       if (!cartItems || cartItems.length === 0) {
         throw new Error("No items in cart");
       }
-  
-      // Fetch only the necessary product IDs for stock update:
-      const productIds = cartItems.map(item => item.product_id || item.id);
-      const response = await fetch(`https://669475034bd61d8314c77f1a.mockapi.io/khanh?id=${productIds.join(",")}`);
-  
+
+      const productIds = cartItems.map((item) => item.product_id || item.id);
+      const response = await fetch(
+        `https://669475034bd61d8314c77f1a.mockapi.io/khanh?id=${productIds.join(
+          ","
+        )}`
+      );
+
       if (!response.ok) {
         throw new Error("Failed to fetch products from API");
       }
-  
+
       const allProducts = await response.json();
-  
-      // 2. Update Stock with Error Handling
+
       const updatePromises = cartItems.map(async (cartItem) => {
         const productToUpdate = allProducts.find(
-          apiProduct => apiProduct.id === (cartItem.product_id || cartItem.id)
+          (apiProduct) => apiProduct.id === (cartItem.product_id || cartItem.id)
         );
-  
+
         if (!productToUpdate) {
-          throw new Error(`Product with ID ${cartItem.product_id || cartItem.id} not found`);
+          throw new Error(
+            `Product with ID ${cartItem.product_id || cartItem.id} not found`
+          );
         }
-  
+
         const newStock = productToUpdate.stock - cartItem.quantity;
-  
+
         if (newStock < 0) {
           throw new Error(
             `Not enough stock for product ${productToUpdate.name}. Available: ${productToUpdate.stock}`
           );
         }
-  
-        // Prepare updated product data (include only relevant fields for efficiency)
+
         const updatedProduct = {
           id: productToUpdate.id,
-          stock: newStock, // Update only stock
+          stock: newStock,
         };
-  
-        console.log('Sending update request...', updatedProduct); // Log updated data concisely
-  
+
+        console.log("Sending update request...", updatedProduct);
+
         const updateResponse = await fetch(
           `https://669475034bd61d8314c77f1a.mockapi.io/khanh/${updatedProduct.id}`,
           {
@@ -160,24 +149,22 @@ const ProductDetailCustomer = () => {
             body: JSON.stringify(updatedProduct),
           }
         );
-  
+
         if (!updateResponse.ok) {
           const errorText = await updateResponse.text();
-          console.error('Update response error:', errorText);
+          console.error("Update response error:", errorText);
           throw new Error(`Failed to update product ${productToUpdate.name}`);
         }
-  
-        console.log('Update successful:', updatedProduct); // Log successful update with updated data
-        return updatedProduct; // Return updated product for potential future use
+
+        console.log("Update successful:", updatedProduct);
+        return updatedProduct;
       });
-  
+
       await Promise.all(updatePromises);
-  
-      // 3. Handle Success and Errors Gracefully
-      console.log('All updates completed successfully');
+
+      console.log("All updates completed successfully");
       alert("Payment successful! Stock has been updated.");
-      navigate("/"); // Redirect after successful payment
-  
+      navigate("/");
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed: " + error.message);
@@ -185,37 +172,41 @@ const ProductDetailCustomer = () => {
       setIsProcessing(false);
     }
   };
- 
- 
- 
- 
-
 
   return (
     <div className="product-detail-container">
-      {/* Products Section */}
       <div className="product-section">
         <div>
-          {/* Kiểm tra nếu có data.cartItems */}
           {data.cartItems && data.cartItems.length > 0 ? (
-            data.cartItems.map(product => (
+            data.cartItems.map((product) => (
               <div key={product.id} className="product-item">
                 <div className="product-item-image">
-                  <img src={product.img} alt={product.name} className="product-item-img" />
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    className="product-item-img"
+                  />
                 </div>
                 <div className="product-item-details">
                   <h3 className="product-item-name">{product.name}</h3>
                   <h3 className="product-item-name">{product.brand}</h3>
                   <div className="product-item-delivery">
                     <Info className="icon" />
-                    <span className="estimated-delivery">Estimated delivery: {currentDate}</span>
+                    <span className="estimated-delivery">
+                      Estimated delivery: {currentDate}
+                    </span>
                   </div>
                 </div>
                 <div className="product-item-price-actions">
                   <div className="product-price-info">
                     <p className="product-price">${product.price.toFixed(2)}</p>
-                    <p className="product-quantity">Quantity: {product.quantity}</p>
-                    <button className="view-product-button" onClick={() => navigate(`/product/${product.id}`)}>
+                    <p className="product-quantity">
+                      Quantity: {product.quantity}
+                    </p>
+                    <button
+                      className="view-product-button"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
                       <FontAwesomeIcon icon={faEye} />
                       View Product
                     </button>
@@ -224,24 +215,35 @@ const ProductDetailCustomer = () => {
               </div>
             ))
           ) : data.CartItems && data.CartItems.length > 0 ? (
-            data.CartItems.map(product => (
+            data.CartItems.map((product) => (
               <div key={product.id} className="product-item">
                 <div className="product-item-image">
-                  <img src={product.img} alt={product.name} className="product-item-img" />
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    className="product-item-img"
+                  />
                 </div>
                 <div className="product-item-details">
                   <h3 className="product-item-name">{product.name}</h3>
                   <h3 className="product-item-name">{product.brand}</h3>
                   <div className="product-item-delivery">
                     <Info className="icon" />
-                    <span className="estimated-delivery">Estimated delivery: {currentDate}</span>
+                    <span className="estimated-delivery">
+                      Estimated delivery: {currentDate}
+                    </span>
                   </div>
                 </div>
                 <div className="product-item-price-actions">
                   <div className="product-price-info">
                     <p className="product-price">${product.price.toFixed(2)}</p>
-                    <p className="product-quantity">Quantity: {product.quantity}</p>
-                    <button className="view-product-button" onClick={() => navigate(`/product/${product.product_id}`)}>
+                    <p className="product-quantity">
+                      Quantity: {product.quantity}
+                    </p>
+                    <button
+                      className="view-product-button"
+                      onClick={() => navigate(`/product/${product.product_id}`)}
+                    >
                       <FontAwesomeIcon icon={faEye} />
                       View Product
                     </button>
@@ -257,10 +259,6 @@ const ProductDetailCustomer = () => {
         </div>
       </div>
 
-
-
-
-      {/* Shipping Details Section */}
       <div className="shipping-section">
         <h2>Shipping Details</h2>
         <div className="shipping-details-grid">
@@ -281,7 +279,6 @@ const ProductDetailCustomer = () => {
             <p>{userInfo?.phoneNumber}</p>
           </div>
 
-
           <div>
             <p>Address</p>
             <p className="font-medium">
@@ -292,32 +289,41 @@ const ProductDetailCustomer = () => {
             <p>Note</p>
             <p className="font-medium">{userInfo?.notes}</p>
           </div>
-
-
         </div>
       </div>
 
-
-      {/* Payment Details Section */}
       <div className="payment-section">
         <h2>Payment Details</h2>
         <div className="payment-details">
-          {/* Kiểm tra xem data.cartItems hay data.CartItems có tồn tại và có phần tử không */}
           {data.cartItems && data.cartItems.length > 0 ? (
-            data.cartItems.map(item => (
+            data.cartItems.map((item) => (
               <div key={item.id} className="payment-row">
-                <span>{item.name} (x{item.quantity})</span>
                 <span>
-                  ${((item.price * item.quantity) * (downPayment > 0 ? downPayment : 1)).toFixed(2)}
+                  {item.name} (x{item.quantity})
+                </span>
+                <span>
+                  $
+                  {(
+                    item.price *
+                    item.quantity *
+                    (downPayment > 0 ? downPayment : 1)
+                  ).toFixed(2)}
                 </span>
               </div>
             ))
           ) : data.CartItems && data.CartItems.length > 0 ? (
-            data.CartItems.map(item => (
+            data.CartItems.map((item) => (
               <div key={item.id} className="payment-row">
-                <span>{item.name} (x{item.quantity})</span>
                 <span>
-                  ${((item.price * item.quantity) * (downPayment > 0 ? downPayment : 1)).toFixed(2)}
+                  {item.name} (x{item.quantity})
+                </span>
+                <span>
+                  $
+                  {(
+                    item.price *
+                    item.quantity *
+                    (downPayment > 0 ? downPayment : 1)
+                  ).toFixed(2)}
                 </span>
               </div>
             ))
@@ -327,41 +333,41 @@ const ProductDetailCustomer = () => {
             </div>
           )}
 
-
           <div className="payment-row">
             <span>Trả trước</span>
             <span>{downPayment || 0}%</span>
           </div>
-
 
           <div className="payment-row">
             <span>Shipping</span>
             <span>${paymentDetails.shipping.toFixed(2)}</span>
           </div>
 
-
           {selectedWarranty?.name && selectedWarranty?.price && (
             <div className="payment-row">
               <span>{selectedWarranty?.name}</span>
-              <span className="text-green-500">${selectedWarranty?.price.toFixed(2)}</span>
+              <span className="text-green-500">
+                ${selectedWarranty?.price.toFixed(2)}
+              </span>
             </div>
           )}
-
 
           <div className="payment-row">
             <span>VAT tax</span>
             <span>${paymentDetails.vatTax.toFixed(2)}</span>
           </div>
 
-
-          {/* Tính tổng giá trị thanh toán */}
           <div className="payment-total">
             <div className="flex justify-between">
               <span className="font-semibold">Total Price :</span>
               <span className="font-semibold">
-                ${(
-                  // Tính tổng giá giỏ hàng từ cartItems hoặc CartItems
-                  ((data.cartItems || data.CartItems || []).reduce((total, item) => total + item.price * item.quantity, 0) * (downPayment > 0 ? downPayment : 1)) +
+                $
+                {(
+                  (data.cartItems || data.CartItems || []).reduce(
+                    (total, item) => total + item.price * item.quantity,
+                    0
+                  ) *
+                    (downPayment > 0 ? downPayment : 1) +
                   paymentDetails.shipping +
                   (selectedWarranty?.price || 0) +
                   paymentDetails.vatTax
@@ -370,24 +376,19 @@ const ProductDetailCustomer = () => {
             </div>
           </div>
         </div>
-
-
       </div>
-      {/* Payment Button */}
+
       <div>
-         <button
-          className={`payment-button ${isProcessing ? 'disabled' : ''}`}
+        <button
+          className={`payment-button ${isProcessing ? "disabled" : ""}`}
           onClick={handlePayment}
           disabled={isProcessing}
         >
-          {isProcessing ? 'Processing...' : 'Payment'}
+          {isProcessing ? "Processing..." : "Payment"}
         </button>
       </div>
     </div>
   );
-}
-
+};
 
 export default ProductDetailCustomer;
-
-
