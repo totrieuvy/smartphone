@@ -76,7 +76,6 @@ background-color: #333;
 
 .product-card {
   border: 1px solid #ccc;
-  border-radius: 10px;
   padding: 20px;
   text-align: center;
   width: 250px;
@@ -84,12 +83,15 @@ background-color: #333;
 
 }
 
+
 .product-card img {
   max-width: 100%;
-  height: auto;
+  height: 200px;
+  width: auto; 
+  object-fit: cover; 
   margin-top: 5px;
   margin-bottom: 5px;
-  transition: transform 0.3s ease, box-shadow 0.6s ease; /* Tăng thời gian hiệu ứng */
+  transition: transform 0.3s ease, box-shadow 0.6s ease; 
 }
 .product-card img:hover {
   transform: translateY(-5px) scale(1.05); /* Di chuyển lên và phóng to ảnh */
@@ -105,24 +107,6 @@ background-color: #333;
 .product-card h2:hover {
   transform: scale(1.05);
   color: rgb(45, 80, 186);
-}
-.quanlity {
-  text-align: left;
-  font-size: 16px;
-}
-.quanlity:hover {
-  transform: scale(1.05);
-  color: rgb(45, 80, 186);
-}
-.price {
-  color: red;
-  text-align: left;
-  font-weight: bold;
-  font-size: 25px;
-}
-.price:hover {
-  transform: scale(1.05);
-  color: green;
 }
 
 .product-card p {
@@ -320,4 +304,39 @@ background-color: #333;
 .carousel-control-next {
   right: 25px; /* Căn chỉnh vị trí nút mũi tên bên trái */
   top:125px
+}
+.name{
+  width: 200px;
+  height: 25px;
+}
+
+.quanlity {
+  text-align: left;
+  font-size: 16px;
+margin-top: 25px;
+}
+.quanlity:hover {
+  transform: scale(1.05);
+  color: rgb(45, 80, 186);
+}
+.price {
+  color: red;
+  text-align: left;
+  font-weight: bold;
+  font-size: 25px;
+}
+.price:hover {
+  transform: scale(1.05);
+  color: green;
+}
+.button-view{
+  border-radius: 5px;
+  background-color: rgb(117, 230, 117);
+  border:  rgb(117, 230, 117);
+  width: 200px;
+  transition: background-color 0.5s ease;
+}
+.button-view:hover{
+  background-color: rgb(72, 132, 216);
+  color: white;
 }

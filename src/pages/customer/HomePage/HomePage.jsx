@@ -236,12 +236,13 @@ const HomePage = ({ searchQuery }) => {
                 <div className="quanlity">{product.quanlity}</div>
                 <div className="price">Price: ${product.price.toFixed(2)}</div>
                 <p>Stock: {product.stock}</p>
-                <Link
+                <button
                   to={`/product/${product.id}`}
                   onClick={() => handleViewProduct(product)}
+                  className="button-view"
                 >
                   View Specifications
-                </Link>
+                </button>
               </div>
             ))}
           </div>
@@ -272,9 +273,9 @@ const HomePage = ({ searchQuery }) => {
                       </div>
                     </div>
 
-                    <Link to={`/product/${product.id}`}>
+                    <button to={`/product/${product.id}`}>
                       View Specifications
-                    </Link>
+                    </button>
                     <button
                       className="remove-button"
                       onClick={() => handleRemoveProduct(product.id)}

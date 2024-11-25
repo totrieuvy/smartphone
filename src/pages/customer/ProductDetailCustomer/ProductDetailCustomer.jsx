@@ -6,8 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
+
 const ProductDetailCustomer = () => {
   const navigate = useNavigate();
+
 
   const location = useLocation();
   const data = location.state?.data;
@@ -15,17 +17,21 @@ const ProductDetailCustomer = () => {
   const downPayment = data?.downPayment;
   const userInfo = data?.userInfo;
   const currentDate = new Date().toLocaleDateString('en-GB');
-  const [paymentStatus, setPaymentStatus] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
 
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 2); // Thêm 5 ngày
   const formattedDeliveryDate = deliveryDate.toLocaleDateString('en-GB');
 
+
   const [provinceName, setProvinceName] = useState('');
   const [districtName, setDistrictName] = useState('');
   const [wardName, setWardName] = useState('');
 
+
   const { selectedProvince, selectedDistrict, selectedWard, address, notes } = userInfo || {};
+
 
   useEffect(() => {
     // Fetch Province Name
@@ -41,6 +47,7 @@ const ProductDetailCustomer = () => {
       }
     };
 
+
     // Fetch District Name
     const fetchDistrictName = async () => {
       if (selectedDistrict) {
@@ -53,6 +60,7 @@ const ProductDetailCustomer = () => {
         }
       }
     };
+
 
     // Fetch Ward Name
     const fetchWardName = async () => {
@@ -67,6 +75,7 @@ const ProductDetailCustomer = () => {
       }
     };
 
+
     // Call each fetch function
     fetchProvinceName();
     fetchDistrictName();
@@ -74,43 +83,17 @@ const ProductDetailCustomer = () => {
   }, [selectedProvince, selectedDistrict, selectedWard]);
 
 
+
+
   if (!data) {
     return <p>No data provided</p>;
   }
-  const products = [
-    {
-      id: 1,
-      name: 'iPad Pro 12.9"',
-      specs: '32GB / 1TB Space Gray',
-      estimatedDelivery: 'May 16, 2022',
-      price: 2599.00,
-      quantity: 2,
-      image: '/api/placeholder/80/80'
-    },
-    {
-      id: 2,
-      name: 'AirPods Max',
-      specs: '32GB / 1TB Space Gray',
-      estimatedDelivery: 'May 16, 2022',
-      price: 2599.00,
-      quantity: 2,
-      image: '/api/placeholder/80/80'
-    },
-    {
-      id: 3,
-      name: 'MacBook Pro 14"',
-      specs: '32GB / 1TB Space Gray',
-      estimatedDelivery: 'May 16, 2022',
-      price: 2599.00,
-      quantity: 2,
-      image: '/api/placeholder/80/80'
-    }
-  ];
+
 
   const shippingDetails = {
-    dateShipping: 'January 16, 2020',
     shipping: 'Viet Nam',
   };
+
 
   const paymentDetails = {
     shipping: 40.00,
@@ -118,9 +101,95 @@ const ProductDetailCustomer = () => {
     total: 766.86
   };
 
-  const handlePayment = {
 
+ 
+  const handlePayment = async () => {
+    try {
+      setIsProcessing(true);
+  
+      // 1. Validate Cart and Fetch Products Efficiently
+      const cartItems = data.cartItems || data.CartItems; // Access cart items
+  
+      if (!cartItems || cartItems.length === 0) {
+        throw new Error("No items in cart");
+      }
+  
+      // Fetch only the necessary product IDs for stock update:
+      const productIds = cartItems.map(item => item.product_id || item.id);
+      const response = await fetch(`https://669475034bd61d8314c77f1a.mockapi.io/khanh?id=${productIds.join(",")}`);
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch products from API");
+      }
+  
+      const allProducts = await response.json();
+  
+      // 2. Update Stock with Error Handling
+      const updatePromises = cartItems.map(async (cartItem) => {
+        const productToUpdate = allProducts.find(
+          apiProduct => apiProduct.id === (cartItem.product_id || cartItem.id)
+        );
+  
+        if (!productToUpdate) {
+          throw new Error(`Product with ID ${cartItem.product_id || cartItem.id} not found`);
+        }
+  
+        const newStock = productToUpdate.stock - cartItem.quantity;
+  
+        if (newStock < 0) {
+          throw new Error(
+            `Not enough stock for product ${productToUpdate.name}. Available: ${productToUpdate.stock}`
+          );
+        }
+  
+        // Prepare updated product data (include only relevant fields for efficiency)
+        const updatedProduct = {
+          id: productToUpdate.id,
+          stock: newStock, // Update only stock
+        };
+  
+        console.log('Sending update request...', updatedProduct); // Log updated data concisely
+  
+        const updateResponse = await fetch(
+          `https://669475034bd61d8314c77f1a.mockapi.io/khanh/${updatedProduct.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedProduct),
+          }
+        );
+  
+        if (!updateResponse.ok) {
+          const errorText = await updateResponse.text();
+          console.error('Update response error:', errorText);
+          throw new Error(`Failed to update product ${productToUpdate.name}`);
+        }
+  
+        console.log('Update successful:', updatedProduct); // Log successful update with updated data
+        return updatedProduct; // Return updated product for potential future use
+      });
+  
+      await Promise.all(updatePromises);
+  
+      // 3. Handle Success and Errors Gracefully
+      console.log('All updates completed successfully');
+      alert("Payment successful! Stock has been updated.");
+      navigate("/"); // Redirect after successful payment
+  
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed: " + error.message);
+    } finally {
+      setIsProcessing(false);
+    }
   };
+ 
+ 
+ 
+ 
+
 
   return (
     <div className="product-detail-container">
@@ -189,6 +258,8 @@ const ProductDetailCustomer = () => {
       </div>
 
 
+
+
       {/* Shipping Details Section */}
       <div className="shipping-section">
         <h2>Shipping Details</h2>
@@ -210,6 +281,7 @@ const ProductDetailCustomer = () => {
             <p>{userInfo?.phoneNumber}</p>
           </div>
 
+
           <div>
             <p>Address</p>
             <p className="font-medium">
@@ -221,8 +293,10 @@ const ProductDetailCustomer = () => {
             <p className="font-medium">{userInfo?.notes}</p>
           </div>
 
+
         </div>
       </div>
+
 
       {/* Payment Details Section */}
       <div className="payment-section">
@@ -253,15 +327,18 @@ const ProductDetailCustomer = () => {
             </div>
           )}
 
+
           <div className="payment-row">
             <span>Trả trước</span>
             <span>{downPayment || 0}%</span>
           </div>
 
+
           <div className="payment-row">
             <span>Shipping</span>
             <span>${paymentDetails.shipping.toFixed(2)}</span>
           </div>
+
 
           {selectedWarranty?.name && selectedWarranty?.price && (
             <div className="payment-row">
@@ -270,10 +347,12 @@ const ProductDetailCustomer = () => {
             </div>
           )}
 
+
           <div className="payment-row">
             <span>VAT tax</span>
             <span>${paymentDetails.vatTax.toFixed(2)}</span>
           </div>
+
 
           {/* Tính tổng giá trị thanh toán */}
           <div className="payment-total">
@@ -292,22 +371,23 @@ const ProductDetailCustomer = () => {
           </div>
         </div>
 
+
       </div>
       {/* Payment Button */}
       <div>
-        <button className="payment-button" onClick={handlePayment}>
-          Payment
+         <button
+          className={`payment-button ${isProcessing ? 'disabled' : ''}`}
+          onClick={handlePayment}
+          disabled={isProcessing}
+        >
+          {isProcessing ? 'Processing...' : 'Payment'}
         </button>
-        {paymentStatus && <div>{paymentStatus}</div>}
       </div>
     </div>
   );
 }
 
+
 export default ProductDetailCustomer;
-
-
-
-
 
 
