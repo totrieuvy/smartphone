@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 const ProductDetailCustomer = () => {
   const navigate = useNavigate();
@@ -90,88 +91,105 @@ const ProductDetailCustomer = () => {
     total: 766.86,
   };
 
-  const handlePayment = async () => {
-    try {
-      setIsProcessing(true);
 
-      const cartItems = data.cartItems || data.CartItems;
+const handlePayment = async () => {
+  try {
+    const result = await Swal.fire({
+      title: "Confirm Payment",
+      text: "Are you sure you want to proceed with the payment?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, pay now!",
+      cancelButtonText: "Cancel",
+    });
 
-      if (!cartItems || cartItems.length === 0) {
-        throw new Error("No items in cart");
-      }
+    if (!result.isConfirmed) {
+      Swal.fire("Cancelled", "Your payment has been cancelled.", "info");
+      return;
+    }
 
-      const productIds = cartItems.map((item) => item.product_id || item.id);
-      const response = await fetch(
-        `https://669475034bd61d8314c77f1a.mockapi.io/khanh?id=${productIds.join(
-          ","
-        )}`
+    setIsProcessing(true);
+
+    const cartItems = data.cartItems || data.CartItems;
+
+    if (!cartItems || cartItems.length === 0) {
+      throw new Error("No items in cart");
+    }
+
+    const productIds = cartItems.map((item) => item.product_id || item.id);
+    const response = await fetch(
+      `https://669475034bd61d8314c77f1a.mockapi.io/khanh?id=${productIds.join(
+        ","
+      )}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch products from API");
+    }
+
+    const allProducts = await response.json();
+
+    const updatePromises = cartItems.map(async (cartItem) => {
+      const productToUpdate = allProducts.find(
+        (apiProduct) => apiProduct.id === (cartItem.product_id || cartItem.id)
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch products from API");
+      if (!productToUpdate) {
+        throw new Error(
+          `Product with ID ${cartItem.product_id || cartItem.id} not found`
+        );
       }
 
-      const allProducts = await response.json();
+      const newStock = productToUpdate.stock - cartItem.quantity;
 
-      const updatePromises = cartItems.map(async (cartItem) => {
-        const productToUpdate = allProducts.find(
-          (apiProduct) => apiProduct.id === (cartItem.product_id || cartItem.id)
+      if (newStock < 0) {
+        throw new Error(
+          `Not enough stock for product ${productToUpdate.name}. Available: ${productToUpdate.stock}`
         );
+      }
 
-        if (!productToUpdate) {
-          throw new Error(
-            `Product with ID ${cartItem.product_id || cartItem.id} not found`
-          );
+      const updatedProduct = {
+        id: productToUpdate.id,
+        stock: newStock,
+      };
+
+      console.log("Sending update request...", updatedProduct);
+
+      const updateResponse = await fetch(
+        `https://669475034bd61d8314c77f1a.mockapi.io/khanh/${updatedProduct.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProduct),
         }
+      );
 
-        const newStock = productToUpdate.stock - cartItem.quantity;
+      if (!updateResponse.ok) {
+        const errorText = await updateResponse.text();
+        console.error("Update response error:", errorText);
+        throw new Error(`Failed to update product ${productToUpdate.name}`);
+      }
 
-        if (newStock < 0) {
-          throw new Error(
-            `Not enough stock for product ${productToUpdate.name}. Available: ${productToUpdate.stock}`
-          );
-        }
+      console.log("Update successful:", updatedProduct);
+      return updatedProduct;
+    });
 
-        const updatedProduct = {
-          id: productToUpdate.id,
-          stock: newStock,
-        };
+    await Promise.all(updatePromises);
 
-        console.log("Sending update request...", updatedProduct);
-
-        const updateResponse = await fetch(
-          `https://669475034bd61d8314c77f1a.mockapi.io/khanh/${updatedProduct.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedProduct),
-          }
-        );
-
-        if (!updateResponse.ok) {
-          const errorText = await updateResponse.text();
-          console.error("Update response error:", errorText);
-          throw new Error(`Failed to update product ${productToUpdate.name}`);
-        }
-
-        console.log("Update successful:", updatedProduct);
-        return updatedProduct;
-      });
-
-      await Promise.all(updatePromises);
-
-      console.log("All updates completed successfully");
-      alert("Payment successful! Stock has been updated.");
-      navigate("/");
-    } catch (error) {
-      console.error("Payment error:", error);
-      alert("Payment failed: " + error.message);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    console.log("All updates completed successfully");
+    Swal.fire("Success!", "Payment successful! Stock has been updated.", "success");
+    navigate("/");
+  } catch (error) {
+    console.error("Payment error:", error);
+    Swal.fire("Error!", "Payment failed: " + error.message, "error");
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   return (
     <div className="product-detail-container">

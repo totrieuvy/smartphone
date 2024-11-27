@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "./ProductDetail.css";
+import Swal from "sweetalert2";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -37,9 +38,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const handleFeedbackClick = () => {
-    navigate(`/feedbacks/${product.id}`);
-  };
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -84,18 +83,71 @@ const ProductDetails = () => {
     }
   };
 
-  const handleBuyClick = () => {
-    if (product) {
-      navigate("/shoppingPage", { state: { product } });
-      console.log("check", product);
-    }
-  };
 
-  const handleBuyInstallClick = () => {
-    if (product) {
-      navigate("/shoppingPageAProduct", { state: { product } });
-    }
-  };
+
+const handleBuyClick = () => {
+  const user = localStorage.getItem("account"); // Kiểm tra thông tin người dùng trong localStorage
+  if (!user) {
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to proceed.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      timer: 5000, // Thời gian hiển thị thông báo là 5 giây
+      timerProgressBar: true, // Hiển thị thanh tiến trình
+    }).then((result) => {
+      if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+        navigate("/login", { state: { from: "/shoppingPage" } });
+      }
+    });
+  } else if (product) {
+    navigate("/shoppingPage", { state: { product } });
+    console.log("check", product);
+  }
+};
+
+const handleBuyInstallClick = () => {
+  const user = localStorage.getItem("account"); // Kiểm tra thông tin người dùng trong localStorage
+  if (!user) {
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to proceed.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      timer: 5000, // Thời gian hiển thị thông báo là 5 giây
+      timerProgressBar: true, // Hiển thị thanh tiến trình
+    }).then((result) => {
+      if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+        navigate("/login", { state: { from: "/shoppingPageAProduct" } });
+      }
+    });
+  } else if (product) {
+    navigate("/shoppingPageAProduct", { state: { product } });
+  }
+};
+
+const handleFeedbackClick = () => {
+  const user = localStorage.getItem("account"); // Kiểm tra thông tin người dùng trong localStorage
+  if (!user) {
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to proceed.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      timer: 5000, // Thời gian hiển thị thông báo là 5 giây
+      timerProgressBar: true, // Hiển thị thanh tiến trình
+    }).then((result) => {
+      if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+        navigate("/login", { state: { from: `/feedbacks/${product.id}` } });
+      }
+    });
+  } else {
+    navigate(`/feedbacks/${product.id}`);
+  }
+};
+
+  
+
 
   return (
     <div>

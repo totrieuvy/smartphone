@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './CartModal.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 const CartModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -96,13 +97,40 @@ const CartModal = ({ isOpen, onClose }) => {
         setSelectAll(updatedProducts.every(product => product.selected));
         console.log("check product select", updatedProducts);
     };
-    const handlePayment = () => {
-        const selectedProducts = products.filter(product => product.selected);
-        onClose();  // Đóng modal nếu cần
-        // Truyền state vào URL khi điều hướng
-        navigate('/shoppingPageMini', { state: { selectedProducts } });
-        console.log("check", selectedProducts);
-    };
+
+
+
+
+const handlePayment = () => {
+  const user = localStorage.getItem("account"); // Kiểm tra thông tin người dùng trong localStorage
+
+  if (!user) {
+    // Hiển thị thông báo bằng Swal.fire với thời gian tự động đóng
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to proceed with payment.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      timer: 5000, // Hiển thị trong 5 giây
+      timerProgressBar: true, // Hiển thị thanh tiến trình
+    }).then((result) => {
+      if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+        // Điều hướng đến trang đăng nhập và lưu URL hiện tại vào state
+        navigate("/login", { state: { from: "/shoppingPageMini" } });
+      }
+    });
+  } else {
+    // Nếu người dùng đã đăng nhập, thực hiện các thao tác thanh toán
+    const selectedProducts = products.filter((product) => product.selected);
+    onClose(); // Đóng modal nếu cần
+    // Truyền state vào URL khi điều hướng
+    navigate("/shoppingPageMini", { state: { selectedProducts } });
+    console.log("check", selectedProducts);
+  }
+};
+
+    
+    
 
 
 
