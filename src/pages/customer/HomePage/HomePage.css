@@ -1,0 +1,342 @@
+.navbar {
+background-color: #333;
+  padding: 20px;
+  width: 87%;
+  display: flex;
+  justify-content: center;
+
+}
+.nav-main{
+  display: flex;
+  justify-content: center;
+}
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 50px;
+  font-size: 25px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+.swiper {
+  cursor: grab;
+}
+
+.swiper-image {
+  height: 30vw;
+  width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.swiper::before,
+.swiper::after {
+  z-index: 2;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  width: 800vw;
+  height: 800vw;
+  border-radius: 50%;
+}
+
+.swiper::before {
+  top: -795vw;
+}
+
+.swiper::after {
+  bottom: -795vw;
+}
+
+.t-title {
+  padding: 0 0 25px;
+}
+/* all card */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 75%;
+  max-width: 1200px; /* Thiết lập chiều rộng tối đa nếu cần */
+  margin-left: 100px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  justify-items: center; /* Căn giữa các item trong grid theo chiều ngang */
+  align-items: center; /* Căn giữa các item trong grid theo chiều dọc */
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+  width: 250px;
+  transition: transform 0.2s;
+
+}
+
+
+.product-card img {
+  max-width: 100%;
+  height: 200px;
+  width: auto; 
+  object-fit: cover; 
+  margin-top: 5px;
+  margin-bottom: 5px;
+  transition: transform 0.3s ease, box-shadow 0.6s ease; 
+}
+.product-card img:hover {
+  transform: translateY(-5px) scale(1.05); /* Di chuyển lên và phóng to ảnh */
+  
+}
+
+.product-card h2 {
+  font-size: 1.2em;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.product-card h2:hover {
+  transform: scale(1.05);
+  color: rgb(45, 80, 186);
+}
+
+.product-card p {
+  margin: 5px 0;
+  text-align: left;
+} /* Existing CSS ... */
+
+/* Existing CSS ... */
+
+.viewed-products {
+  border: 2px solid #333;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  position: relative;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto; /* Center the div horizontally */
+  text-align: left; /* Center the content inside the div */
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+  margin-bottom: 50px;
+}
+
+.clear-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.clear-button:hover {
+  color: blue;
+}
+
+.product-cards {
+  position: relative; /* Ensure the remove button is positioned relative to the product card */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  width: 200px;
+  margin: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.product-cards:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow on hover */
+}
+
+.remove-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  display: none;
+  font-size: 16px;
+  text-align: center;
+}
+
+.product-cards:hover .remove-button {
+  display: block;
+}
+
+.remove-button:hover {
+  background: darkred;
+}
+.product-all {
+  display: flex;
+  justify-content: space-between; /* Space out the two columns */
+  align-items: center; /* Vertically align the items in the center */
+  margin: 20px 0;
+}
+
+.product-image {
+  flex: 1; /* Takes up 1 part of the available space */
+  max-width: 40%; /* Limit the size of the image section */
+}
+
+.product-image img {
+  width: 100%; /* Make the image take the full width of its container */
+  height: auto; /* Maintain the aspect ratio of the image */
+  border-radius: 5px; /* Optional: add rounded corners to the image */
+}
+
+.product-details {
+  flex: 1; /* Takes up the remaining space */
+  padding-left: 20px; /* Adds space between the image and the text */
+}
+
+.product-details h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.product-details p {
+  font-size: 1.2em;
+  color: #333;
+}
+
+/* CSS cho HomePage.css */
+
+.viewed-products .product-cards {
+  border: 1px solid #ccc; /* Đặt viền cho mỗi thẻ sản phẩm */
+  margin: 10px;
+  border-radius: 5px; /* Tuỳ chọn: Bo tròn các góc của thẻ */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Tuỳ chọn: Thêm đổ bóng nhẹ */
+}
+.product-grids {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các thẻ con xuống dòng khi hết không gian */
+  justify-content: center; /* Căn chỉnh các phần tử */
+ 
+}
+.all-view{
+  padding-bottom: 20px;
+}
+.product-cards {
+  flex: 1 0 40%; /* Tăng chiều rộng lên 30% */
+  margin: 5px; /* Khoảng cách giữa các sản phẩm */
+  box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi chiều rộng */
+  display: flex;
+  flex-direction: column; /* Các phần tử trong mỗi thẻ sản phẩm xếp theo chiều dọc */
+  width: 400px;
+}
+
+.product-all {
+  display: flex;
+  flex-direction: row; /* Các hình ảnh và chi tiết sản phẩm sẽ nằm ngang */
+  justify-content: space-between; /* Căn chỉnh hình ảnh và chi tiết sản phẩm */
+}
+
+.product-image {
+  width: 40%; /* Hình ảnh chiếm 40% chiều rộng */
+}
+
+.product-image img {
+  max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều rộng */
+  height: auto; /* Giữ tỷ lệ ảnh */
+}
+
+.product-details {
+  width: 75%; /* Chi tiết sản phẩm chiếm 55% chiều rộng */
+  text-align: left;
+}
+
+.product-image img {
+  max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều rộng */
+  height: auto; /* Giữ tỷ lệ ảnh */
+}
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px; /* Độ rộng của nút mũi tên */
+  height: 50px; /* Độ cao của nút mũi tên */
+  background-color: rgba(240, 234, 234, 0.5); /* Nền mờ */
+  border-radius: 50%; /* Bo tròn nút */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: rgba(248, 246, 246, 0.8); /* Hiệu ứng hover */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1); /* Đổi màu mũi tên sang màu sáng */
+  width: 20px; /* Kích thước mũi tên */
+  height: 20px;
+}
+
+.carousel-control-prev {
+  left: 25px; /* Căn chỉnh vị trí nút mũi tên bên trái */
+  top:125px
+}
+
+.carousel-control-next {
+  right: 25px; /* Căn chỉnh vị trí nút mũi tên bên trái */
+  top:125px
+}
+.name{
+  width: 200px;
+  height: 25px;
+}
+
+.quanlity {
+  text-align: left;
+  font-size: 16px;
+margin-top: 25px;
+}
+.quanlity:hover {
+  transform: scale(1.05);
+  color: rgb(45, 80, 186);
+}
+.price {
+  color: red;
+  text-align: left;
+  font-weight: bold;
+  font-size: 25px;
+}
+.price:hover {
+  transform: scale(1.05);
+  color: green;
+}
+.button-view{
+  border-radius: 5px;
+  background-color: rgb(117, 230, 117);
+  border:  rgb(117, 230, 117);
+  width: 200px;
+  transition: background-color 0.5s ease;
+}
+.button-view:hover{
+  background-color: rgb(72, 132, 216);
+  color: white;
+}

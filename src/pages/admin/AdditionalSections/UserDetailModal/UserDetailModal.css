@@ -1,0 +1,33 @@
+/* UserDetailModal.css */
+
+.user-detail-modal-body {
+    display: grid;
+    gap: 1rem;
+    padding: 20px;
+}
+
+.modal-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.left-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal .form-control[readonly] {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+.user-detail-modal-body .form-label {
+    font-weight: bold;
+}

@@ -1,0 +1,22 @@
+.Feedback {
+  h2 {
+    margin: 0;
+    text-transform: uppercase;
+    color: red;
+    margin: 20px 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__table {
+    margin: 0 auto;
+    width: 80%;
+  }
+
+  &__link {
+    list-style: none;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}

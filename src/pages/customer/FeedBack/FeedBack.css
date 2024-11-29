@@ -1,0 +1,25 @@
+/* FeedbackPage.css */
+.feedback-page {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .feedback-list {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+  
+  .feedback-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .feedback-item p {
+    margin: 5px 0;
+  }
+  
